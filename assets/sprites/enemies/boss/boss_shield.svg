@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 160" width="140" height="160">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00ffff" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0.2"/>
+    </linearGradient>
+    <filter id="shieldGlow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Hexagonal Honeycomb Energy Shield Barrier -->
+  <polygon points="120,10 40,30 10,80 40,130 120,150 90,80" fill="url(#shieldGrad)" stroke="#00ffff" stroke-width="3" filter="url(#shieldGlow)"/>
+  <!-- Internal Hex Lattice Lines -->
+  <polygon points="100,30 50,45 30,80 50,115 100,130 75,80" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.8"/>
+  <circle cx="50" cy="80" r="16" fill="#00ffff" fill-opacity="0.3"/>
+</svg>

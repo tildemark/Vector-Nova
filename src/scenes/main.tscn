@@ -1,0 +1,245 @@
+[gd_scene load_steps=14 format=3 uid="uid://c5q3xrvq77k2e"]
+
+[ext_resource type="Script" path="res://src/scenes/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://src/scenes/starfield.gd" id="2_star"]
+[ext_resource type="Script" path="res://src/pools/object_pool.gd" id="3_pool"]
+[ext_resource type="PackedScene" path="res://src/pools/projectile.tscn" id="4_proj"]
+[ext_resource type="PackedScene" path="res://src/pools/enemy_bullet.tscn" id="5_ebul"]
+[ext_resource type="PackedScene" path="res://src/entities/player/player.tscn" id="6_play"]
+[ext_resource type="Script" path="res://src/managers/spawner_manager.gd" id="7_spaw"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/emp_icon.svg" id="8_empico"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp"]
+bg_color = Color(0, 0.9, 1, 0.9)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_emp"]
+bg_color = Color(0.04, 0.12, 0.22, 0.75)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.9, 1, 0.8)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_emp_fill"]
+bg_color = Color(0, 0.95, 1, 0.95)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bosshp"]
+bg_color = Color(0.9, 0.1, 0.2, 0.95)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("2_star")
+
+[node name="PlayerBulletPool" type="Node2D" parent="."]
+script = ExtResource("3_pool")
+pool_size = 140
+bullet_scene = ExtResource("4_proj")
+
+[node name="EnemyBulletPool" type="Node2D" parent="."]
+script = ExtResource("3_pool")
+pool_size = 150
+bullet_scene = ExtResource("5_ebul")
+
+[node name="SpawnerManager" type="Node2D" parent="."]
+script = ExtResource("7_spaw")
+
+[node name="Player" parent="." instance=ExtResource("6_play")]
+position = Vector2(180, 360)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TopBar" type="HBoxContainer" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = -40.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme_override_constants/separation = 28
+mouse_filter = 2
+
+[node name="HPContainer" type="HBoxContainer" parent="UI/HUD/TopBar"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HPTitle" type="Label" parent="UI/HUD/TopBar/HPContainer"]
+layout_mode = 2
+text = "HULL:"
+
+[node name="HPBar" type="ProgressBar" parent="UI/HUD/TopBar/HPContainer"]
+custom_minimum_size = Vector2(140, 16)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp")
+value = 100.0
+show_percentage = false
+
+[node name="WeaponContainer" type="HBoxContainer" parent="UI/HUD/TopBar"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WeaponTitle" type="Label" parent="UI/HUD/TopBar/WeaponContainer"]
+layout_mode = 2
+text = "WEAPON:"
+
+[node name="WeaponLabel" type="Label" parent="UI/HUD/TopBar/WeaponContainer"]
+layout_mode = 2
+text = "TIER 1 [■□□□]"
+
+[node name="ScrapContainer" type="HBoxContainer" parent="UI/HUD/TopBar"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ScrapTitle" type="Label" parent="UI/HUD/TopBar/ScrapContainer"]
+layout_mode = 2
+text = "SCRAP:"
+
+[node name="ScrapLabel" type="Label" parent="UI/HUD/TopBar/ScrapContainer"]
+layout_mode = 2
+text = "⬡ 0"
+
+[node name="Spacer" type="Control" parent="UI/HUD/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="HangarButton" type="Button" parent="UI/HUD/TopBar"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_emp")
+text = "HANGAR"
+
+[node name="FPSLabel" type="Label" parent="UI/HUD/TopBar"]
+layout_mode = 2
+text = "FPS: 60"
+
+[node name="BossContainer" type="VBoxContainer" parent="UI/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -240.0
+offset_top = 64.0
+offset_right = 240.0
+offset_bottom = 108.0
+grow_horizontal = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="BossNameLabel" type="Label" parent="UI/HUD/BossContainer"]
+layout_mode = 2
+text = "⚠️ DREADNOUGHT NOVA // FLAGSHIP CORE ⚠️"
+horizontal_alignment = 1
+
+[node name="BossHPBar" type="ProgressBar" parent="UI/HUD/BossContainer"]
+custom_minimum_size = Vector2(480, 14)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_bosshp")
+max_value = 1400.0
+value = 1400.0
+show_percentage = false
+
+[node name="EMPContainer" type="VBoxContainer" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -140.0
+offset_right = -40.0
+offset_bottom = -30.0
+grow_horizontal = 0
+grow_vertical = 0
+alignment = 1
+
+[node name="EMPButton" type="Button" parent="UI/HUD/EMPContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_emp")
+icon = ExtResource("8_empico")
+icon_alignment = 1
+expand_icon = true
+
+[node name="EMPChargeBar" type="ProgressBar" parent="UI/HUD/EMPContainer"]
+custom_minimum_size = Vector2(80, 8)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_emp_fill")
+value = 50.0
+show_percentage = false
+
+[node name="EMPStatusLabel" type="Label" parent="UI/HUD/EMPContainer"]
+layout_mode = 2
+text = "EMP: 50%"
+horizontal_alignment = 1
+
+[node name="WaveBanner" type="Label" parent="UI/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -340.0
+offset_top = -80.0
+offset_right = 340.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(340, 30)
+text = "// WAVE 1 //"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterHint" type="Label" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -20.0
+offset_right = 280.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TOUCH & DRAG ANYWHERE TO PILOT SHIP • AUTO-FIRING"
+horizontal_alignment = 1
+vertical_alignment = 1

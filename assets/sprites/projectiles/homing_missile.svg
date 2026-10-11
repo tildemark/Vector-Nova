@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 12" width="28" height="12">
+  <defs>
+    <linearGradient id="missileGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="50%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <filter id="mGlow">
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Missile Body -->
+  <polygon points="26,6 18,2 4,3 2,6 4,9 18,10" fill="url(#missileGrad)" stroke="#38bdf8" stroke-width="1"/>
+  <!-- Fins -->
+  <polygon points="6,2 2,0 4,3" fill="#0284c7"/>
+  <polygon points="6,10 2,12 4,9" fill="#0284c7"/>
+  <!-- Thruster Glow -->
+  <circle cx="2" cy="6" r="2" fill="#38bdf8" filter="url(#mGlow)"/>
+</svg>

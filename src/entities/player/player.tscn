@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8t4m7cpe6g3a"]
+
+[ext_resource type="Script" path="res://src/entities/player/player.gd" id="1_play"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/player_ship.svg" id="2_ship"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/thruster_flame.svg" id="3_flame"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p"]
+radius = 16.0
+height = 64.0
+
+[node name="Player" type="Area2D"]
+collision_layer = 1
+collision_mask = 6
+script = ExtResource("1_play")
+
+[node name="ThrusterSprite" type="Sprite2D" parent="."]
+position = Vector2(-42, 0)
+texture = ExtResource("3_flame")
+
+[node name="ShipSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_ship")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5707963
+shape = SubResource("CapsuleShape2D_p")
+
+[node name="MuzzlePoint" type="Marker2D" parent="."]
+position = Vector2(46, 0)

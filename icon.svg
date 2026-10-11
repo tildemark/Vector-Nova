@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d"/>
+      <stop offset="100%" stop-color="#050811"/>
+    </linearGradient>
+    <linearGradient id="shipGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="50%" stop-color="#00a8ff"/>
+      <stop offset="100%" stop-color="#7000ff"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00ffff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ff007f" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="26" fill="url(#bgGrad)" stroke="#00e5ff" stroke-width="2" stroke-opacity="0.4"/>
+  <!-- Thruster Trail -->
+  <polygon points="20,64 45,56 42,64 45,72" fill="#00e5ff" opacity="0.8"/>
+  <polygon points="12,64 36,60 34,64 36,68" fill="#ffffff" opacity="0.9"/>
+  <!-- Spaceship Polygon (pointing right) -->
+  <polygon points="106,64 38,32 52,60 40,64 52,68 38,96" fill="url(#shipGrad)" stroke="#00ffff" stroke-width="2"/>
+  <polygon points="98,64 48,42 56,62 48,64 56,66 48,86" fill="#051329" opacity="0.7"/>
+  <!-- Cockpit canopy -->
+  <polygon points="84,64 62,58 56,64 62,70" fill="#00ffff" opacity="0.95"/>
+  <!-- Energy Nodes -->
+  <circle cx="50" cy="40" r="3" fill="#00ffff"/>
+  <circle cx="50" cy="88" r="3" fill="#00ffff"/>
+  <circle cx="106" cy="64" r="2.5" fill="#ffffff"/>
+</svg>

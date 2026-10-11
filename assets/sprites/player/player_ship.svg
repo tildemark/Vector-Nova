@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 64" width="96" height="64">
+  <defs>
+    <linearGradient id="hullGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#14213d"/>
+      <stop offset="60%" stop-color="#00a8ff"/>
+      <stop offset="100%" stop-color="#00f7ff"/>
+    </linearGradient>
+    <linearGradient id="wingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b132b"/>
+      <stop offset="100%" stop-color="#1c2541"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Wings -->
+  <polygon points="12,6 40,24 28,32 8,30" fill="url(#wingGrad)" stroke="#00f7ff" stroke-width="1.5"/>
+  <polygon points="12,58 40,40 28,32 8,34" fill="url(#wingGrad)" stroke="#00f7ff" stroke-width="1.5"/>
+  <!-- Wingtip Plasma Cannons -->
+  <rect x="24" y="4" width="22" height="4" rx="2" fill="#00f7ff" opacity="0.9"/>
+  <rect x="24" y="56" width="22" height="4" rx="2" fill="#00f7ff" opacity="0.9"/>
+  <!-- Main Fuselage -->
+  <polygon points="90,32 30,14 18,22 22,32 18,42 30,50" fill="url(#hullGrad)" stroke="#00ffff" stroke-width="2"/>
+  <!-- Cockpit Glass Canopy -->
+  <polygon points="72,32 50,26 44,32 50,38" fill="#00ffff" opacity="0.95" filter="url(#glow)"/>
+  <!-- Armor Panels -->
+  <polygon points="62,32 40,22 34,32 40,42" fill="#0b132b" opacity="0.6"/>
+  <!-- Engine Nozzle -->
+  <rect x="14" y="27" width="6" height="10" rx="1.5" fill="#48cae4"/>
+</svg>

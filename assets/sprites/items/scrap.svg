@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="scrapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5d4"/>
+      <stop offset="50%" stop-color="#00bbf9"/>
+      <stop offset="100%" stop-color="#0077b6"/>
+    </linearGradient>
+    <filter id="scrapGlow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Outer Aura -->
+  <polygon points="16,2 30,16 16,30 2,16" fill="none" stroke="#00f5d4" stroke-width="1.2" opacity="0.6"/>
+  <!-- Faceted Crystal Core -->
+  <polygon points="16,4 28,16 16,28 4,16" fill="url(#scrapGrad)" stroke="#ffffff" stroke-width="1.2" filter="url(#scrapGlow)"/>
+  <!-- Internal facets -->
+  <polygon points="16,4 16,28 28,16" fill="#00ffff" opacity="0.4"/>
+  <polygon points="16,8 24,16 16,24 8,16" fill="#ffffff" opacity="0.8"/>
+  <circle cx="16" cy="16" r="2.5" fill="#ffffff"/>
+</svg>

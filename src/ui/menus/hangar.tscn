@@ -1,0 +1,269 @@
+[gd_scene load_steps=5 format=3 uid="uid://c6f3y2m1w0k9p"]
+
+[ext_resource type="Script" path="res://src/ui/menus/hangar.gd" id="1_hang"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 16.0
+bg_color = Color(0.06, 0.09, 0.16, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.8, 1, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_launch"]
+content_margin_left = 32.0
+content_margin_top = 12.0
+content_margin_right = 32.0
+content_margin_bottom = 12.0
+bg_color = Color(0, 0.7, 0.9, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12, 0.18, 0.3, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.9, 1, 0.6)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Hangar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hang")
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.04, 0.08, 1)
+
+[node name="Header" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = -40.0
+offset_bottom = 60.0
+grow_horizontal = 2
+
+[node name="Title" type="Label" parent="Header"]
+layout_mode = 2
+text = "VECTOR NOVA // SHIP HANGAR & TECH TREE"
+
+[node name="Spacer" type="Control" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrapBalanceLabel" type="Label" parent="Header"]
+layout_mode = 2
+text = "TOTAL SCRAP: ⬡ 150"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = 70.0
+offset_right = -60.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="UpgradesCard" type="PanelContainer" parent="ScrollContainer/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ScrollContainer/Content/UpgradesCard"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CardTitle" type="Label" parent="ScrollContainer/Content/UpgradesCard/VBox"]
+layout_mode = 2
+text = "— PERMANENT HULL & WEAPON TECH —"
+
+[node name="HullRow" type="HBoxContainer" parent="ScrollContainer/Content/UpgradesCard"]
+layout_mode = 2
+
+[node name="HullInfo" type="VBoxContainer" parent="ScrollContainer/Content/UpgradesCard/HullRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="ScrollContainer/Content/UpgradesCard/HullRow/HullInfo"]
+layout_mode = 2
+text = "Reinforced Armor Hull"
+
+[node name="HullTierLabel" type="Label" parent="ScrollContainer/Content/UpgradesCard/HullRow/HullInfo"]
+layout_mode = 2
+text = "TIER 0/5 (+0 HP)"
+
+[node name="HullButton" type="Button" parent="ScrollContainer/Content/UpgradesCard/HullRow"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "UPGRADE [60 ⬡]"
+
+[node name="FireRateRow" type="HBoxContainer" parent="ScrollContainer/Content/UpgradesCard"]
+layout_mode = 2
+
+[node name="FireRateInfo" type="VBoxContainer" parent="ScrollContainer/Content/UpgradesCard/FireRateRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="ScrollContainer/Content/UpgradesCard/FireRateRow/FireRateInfo"]
+layout_mode = 2
+text = "Plasma Accelerators"
+
+[node name="FireRateTierLabel" type="Label" parent="ScrollContainer/Content/UpgradesCard/FireRateRow/FireRateInfo"]
+layout_mode = 2
+text = "TIER 0/5 (-0% Delay)"
+
+[node name="FireRateButton" type="Button" parent="ScrollContainer/Content/UpgradesCard/FireRateRow"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "UPGRADE [75 ⬡]"
+
+[node name="MagnetRow" type="HBoxContainer" parent="ScrollContainer/Content/UpgradesCard"]
+layout_mode = 2
+
+[node name="MagnetInfo" type="VBoxContainer" parent="ScrollContainer/Content/UpgradesCard/MagnetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="ScrollContainer/Content/UpgradesCard/MagnetRow/MagnetInfo"]
+layout_mode = 2
+text = "Quantum Tractor Beam"
+
+[node name="MagnetTierLabel" type="Label" parent="ScrollContainer/Content/UpgradesCard/MagnetRow/MagnetInfo"]
+layout_mode = 2
+text = "TIER 0/5 (+0px Range)"
+
+[node name="MagnetButton" type="Button" parent="ScrollContainer/Content/UpgradesCard/MagnetRow"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "UPGRADE [45 ⬡]"
+
+[node name="BoostersCard" type="PanelContainer" parent="ScrollContainer/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ScrollContainer/Content/BoostersCard"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CardTitle" type="Label" parent="ScrollContainer/Content/BoostersCard/VBox"]
+layout_mode = 2
+text = "— PRE-RUN TACTICAL BOOSTERS —"
+
+[node name="BoosterRow" type="HBoxContainer" parent="ScrollContainer/Content/BoostersCard"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="OverclockButton" type="Button" parent="ScrollContainer/Content/BoostersCard/BoosterRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "OVERCLOCK DRIVE [40 ⬡]"
+
+[node name="ShieldButton" type="Button" parent="ScrollContainer/Content/BoostersCard/BoosterRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "ENERGY BARRIER [40 ⬡]"
+
+[node name="MonetizationCard" type="PanelContainer" parent="ScrollContainer/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ScrollContainer/Content/MonetizationCard"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CardTitle" type="Label" parent="ScrollContainer/Content/MonetizationCard/VBox"]
+layout_mode = 2
+text = "— PILOT PACKS & SUPPLY HOOKS —"
+
+[node name="AdRow" type="HBoxContainer" parent="ScrollContainer/Content/MonetizationCard"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="AdButton" type="Button" parent="ScrollContainer/Content/MonetizationCard/AdRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "CLAIM +100 SCRAP [WATCH AD]"
+
+[node name="IAPButton" type="Button" parent="ScrollContainer/Content/MonetizationCard/AdRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "STARTER PACK ($1.99)"
+
+[node name="Footer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -75.0
+offset_right = -40.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="LaunchButton" type="Button" parent="Footer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_launch")
+text = "LAUNCH SORTIE // ENGAGE MISSION"
+
+[node name="NoticeBanner" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -25.0
+offset_right = 260.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TECH UPGRADE ACQUIRED"
+horizontal_alignment = 1
+vertical_alignment = 1

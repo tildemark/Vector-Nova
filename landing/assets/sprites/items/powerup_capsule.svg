@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">
+  <defs>
+    <linearGradient id="pCapsuleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="30%" stop-color="#fbbf24"/>
+      <stop offset="70%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="pGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Outer Energy Diamond Halo -->
+  <polygon points="18,1 35,18 18,35 1,18" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/>
+  <!-- Rounded Power Capsule -->
+  <rect x="7" y="7" width="22" height="22" rx="6" fill="url(#pCapsuleGrad)" stroke="#ffffff" stroke-width="1.5" filter="url(#pGlow)"/>
+  <!-- Sci-Fi "P" Power Symbol -->
+  <path d="M14,25 L14,11 L20,11 C22.5,11 24,12.5 24,15 C24,17.5 22.5,19 20,19 L14,19" fill="none" stroke="#1e1b4b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

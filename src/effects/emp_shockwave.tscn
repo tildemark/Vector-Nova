@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dh3q7n4k5p6a2"]
+
+[ext_resource type="Script" path="res://src/effects/emp_shockwave.gd" id="1_emps"]
+
+[node name="EmpShockwave" type="Node2D"]
+script = ExtResource("1_emps")

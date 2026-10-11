@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 48" width="72" height="48">
+  <defs>
+    <linearGradient id="scoutGrad" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#3a0ca3"/>
+      <stop offset="50%" stop-color="#7209b7"/>
+      <stop offset="100%" stop-color="#f72585"/>
+    </linearGradient>
+    <linearGradient id="scoutCore" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#480ca8"/>
+      <stop offset="100%" stop-color="#b5179e"/>
+    </linearGradient>
+    <filter id="scoutGlow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Forward Swept Wings (Pointing Left) -->
+  <polygon points="60,6 20,12 8,24 20,36 60,42 46,24" fill="url(#scoutGrad)" stroke="#f72585" stroke-width="1.5"/>
+  <!-- Wingtip Cannons -->
+  <rect x="10" y="9" width="16" height="3" rx="1.5" fill="#f72585"/>
+  <rect x="10" y="36" width="16" height="3" rx="1.5" fill="#f72585"/>
+  <!-- Central Hull -->
+  <polygon points="56,24 32,16 6,24 32,32" fill="url(#scoutCore)" stroke="#ff007f" stroke-width="1.8"/>
+  <!-- Menacing Optic Eye / Sensor Core -->
+  <polygon points="24,24 12,21 6,24 12,27" fill="#ffffff" filter="url(#scoutGlow)"/>
+  <!-- Thrusters on right side -->
+  <polygon points="62,20 68,24 62,28" fill="#4cc9f0"/>
+</svg>

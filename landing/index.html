@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vector Nova // 2D Sci-Fi Shoot 'Em Up for Android</title>
+  <meta name="description" content="Vector Nova is an adrenaline-fueled horizontal sci-fi shoot 'em up built with Godot 4 for Android. Features relative touch flight controls, modular capital ship battles, 4 evolving weapon tiers, and deep tech tree meta-progression.">
+  <meta name="theme-color" content="#070a14">
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tildemark.github.io/Vector-Nova/">
+  <meta property="og:title" content="Vector Nova // Fast-Paced Mobile Sci-Fi Shmup">
+  <meta property="og:description" content="Engage the void. Pilot Vector Nova with 120 FPS relative touch controls, modular boss encounters, and persistent tech upgrades on Android.">
+  <meta property="og:image" content="assets/images/hero_artwork.jpg">
+
+  <!-- Google Fonts: Orbitron, Rajdhani, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- PROCEDURAL PARALLAX BACKGROUND -->
+  <div class="star-canvas-container" aria-hidden="true">
+    <canvas id="starfield"></canvas>
+    <div class="space-vignette"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- STICKY GLASSPHORIC NAVBAR -->
+  <header class="navbar" id="top-navbar">
+    <div class="nav-container">
+      <a href="#top" class="brand-link" id="brand-logo">
+        <div class="brand-icon-wrapper">
+          <img src="assets/sprites/player/player_ship.svg" alt="Vector Nova Logo" class="brand-icon">
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">VECTOR NOVA</span>
+          <span class="brand-subtitle">BY VECTOR4 // GODOT 4.7</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="main-nav">
+        <a href="#flight-controls" class="nav-link">CONTROLS</a>
+        <a href="#arsenal" class="nav-link">WEAPONS</a>
+        <a href="#dreadnought" class="nav-link">THE BOSS</a>
+        <a href="#tech-tree" class="nav-link">TECH TREE</a>
+        <a href="#gallery" class="nav-link">GAMEPLAY</a>
+        <a href="#download" class="nav-link nav-cta-mobile">GET APK</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- SFX Audio Toggle Button -->
+        <button class="sound-toggle-btn" id="sfx-toggle-btn" title="Toggle Sci-Fi SFX Synthesizer" aria-label="Toggle Sound Effects">
+          <svg class="sfx-icon sfx-on" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </svg>
+          <svg class="sfx-icon sfx-off" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="display:none;">
+            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27l4.06 4.06H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+          </svg>
+          <span class="sfx-status">SFX: ON</span>
+        </button>
+
+        <a href="#download" class="btn-nav-download" id="nav-btn-apk">
+          <span>GET APK</span>
+          <span class="pulse-glow"></span>
+        </a>
+
+        <!-- Mobile Hamburger Toggle -->
+        <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Open Navigation Menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============================================== -->
+    <!-- HERO SECTION                                   -->
+    <!-- ============================================== -->
+    <section class="hero-section" id="hero">
+      <div class="hero-container">
+        <div class="hero-text-col">
+          <div class="hud-chip">
+            <span class="chip-dot"></span>
+            <span class="chip-text">SYSTEM ACTIVE // GODOT 4.7 GL COMPATIBILITY</span>
+          </div>
+
+          <h1 class="hero-headline">
+            ENGAGE THE VOID.<br>
+            <span class="neon-gradient">PILOT VECTOR NOVA.</span>
+          </h1>
+
+          <p class="hero-lead">
+            The definitive mobile space shooter engineered from the ground up for touchscreen precision. Master zero-occlusion <strong>Relative Drag controls</strong>, blast through alien fleets at a silky-smooth <strong>120 FPS</strong>, and conquer the modular <strong>Dreadnought Nova</strong>.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="https://github.com/tildemark/Vector-Nova/releases/latest" class="btn btn-hero-primary" id="btn-hero-apk">
+              <div class="btn-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-5.5H8l4-4 4 4h-3v5.5h-2z"/>
+                </svg>
+              </div>
+              <div class="btn-labels">
+                <span class="btn-subtext">DIRECT ANDROID INSTALL</span>
+                <span class="btn-maintext">DOWNLOAD APK (v1.0.0)</span>
+              </div>
+            </a>
+
+            <a href="https://github.com/tildemark/Vector-Nova" target="_blank" rel="noopener noreferrer" class="btn btn-hero-secondary" id="btn-hero-github">
+              <div class="btn-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                </svg>
+              </div>
+              <div class="btn-labels">
+                <span class="btn-subtext">OPEN SOURCE</span>
+                <span class="btn-maintext">GITHUB SOURCE</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- Quick Metrics Bar -->
+          <div class="hero-stats-strip">
+            <div class="stat-pill">
+              <span class="stat-val">120 FPS</span>
+              <span class="stat-desc">Zero-GC Stutter Free</span>
+            </div>
+            <div class="stat-sep">/</div>
+            <div class="stat-pill">
+              <span class="stat-val">20:9</span>
+              <span class="stat-desc">Ultrawide Adaptive</span>
+            </div>
+            <div class="stat-sep">/</div>
+            <div class="stat-pill">
+              <span class="stat-val">0 KB</span>
+              <span class="stat-desc">Runtime Allocations</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual: 3D Holographic Artwork Card -->
+        <div class="hero-artwork-col">
+          <div class="holo-card-wrapper" id="hero-card">
+            <div class="holo-card">
+              <div class="card-glass-glow"></div>
+              <img src="assets/images/hero_artwork.jpg" alt="Vector Nova Space Dogfight Artwork" class="hero-keyart-img">
+              
+              <!-- HUD Overlays on Artwork -->
+              <div class="art-overlay-hud">
+                <div class="hud-corner hud-top-left">
+                  <span>TARGET: DREADNOUGHT NOVA</span>
+                  <small>SECTOR 04 // ALERT LEVEL 5</small>
+                </div>
+                <div class="hud-corner hud-bottom-right">
+                  <span class="live-blink">● TELEMETRY LOCKED</span>
+                  <small>CORE FREQ: 4.8 GHz</small>
+                </div>
+              </div>
+
+              <!-- Reticle Graphic -->
+              <div class="hud-reticle"></div>
+            </div>
+            <div class="card-reflection"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- INTERACTIVE CONTROL LAB: RELATIVE TOUCH        -->
+    <!-- ============================================== -->
+    <section class="section-container" id="flight-controls">
+      <div class="section-heading-center">
+        <span class="section-tag">// TOUCH ERGONOMICS INNOVATION</span>
+        <h2 class="section-title">ENGINEERED FOR MOBILE THUMBS</h2>
+        <p class="section-subtitle">
+          Traditional mobile shmups force your thumb directly over your ship, creating an agonizing blind spot that gets you killed. Vector Nova solves this with <strong>Relative Touch Drag</strong>.
+        </p>
+      </div>
+
+      <!-- INTERACTIVE COMPARISON LAB -->
+      <div class="controls-lab-wrapper">
+        <div class="lab-modes-toggle">
+          <button class="mode-tab active" id="tab-relative" data-mode="relative">
+            <span class="tab-indicator">✓</span> VECTOR NOVA (RELATIVE DRAG)
+          </button>
+          <button class="mode-tab" id="tab-direct" data-mode="direct">
+            <span class="tab-indicator">✕</span> TRADITIONAL TOUCH (OCCLUDED)
+          </button>
+        </div>
+
+        <div class="touch-simulator-arena" id="touch-arena">
+          <div class="arena-canvas-box">
+            <canvas id="control-canvas"></canvas>
+            <div class="arena-hud-overlay">
+              <div class="arena-info" id="arena-explanation">
+                <strong>DRAG ANYWHERE IN BOX</strong>
+                <span>Notice how your virtual thumb never blocks the ship or incoming enemy bullets!</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="controls-feature-cards">
+            <div class="control-feature-item">
+              <div class="c-feat-icon">🎯</div>
+              <div class="c-feat-text">
+                <h4>Relative Offset Tracking</h4>
+                <p>The ship moves in 1:1 delta synchronization with your touch movement anywhere on screen, floating 70px above your thumb.</p>
+              </div>
+            </div>
+            <div class="control-feature-item">
+              <div class="c-feat-icon">🛡️</div>
+              <div class="c-feat-text">
+                <h4>Full Peripheral Vision</h4>
+                <p>React instantly to high-speed incoming projectiles without your fingers obstructing critical line-of-sight.</p>
+              </div>
+            </div>
+            <div class="control-feature-item">
+              <div class="c-feat-icon">📐</div>
+              <div class="c-feat-text">
+                <h4>Dynamic Banking Tilt</h4>
+                <p>Ship automatically banks +12° when climbing or diving, giving tactile visual feedback to every evasive maneuver.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- INTERACTIVE ARSENAL & EMP FIRING RANGE         -->
+    <!-- ============================================== -->
+    <section class="section-container" id="arsenal">
+      <div class="section-heading-center">
+        <span class="section-tag">// MODULAR WEAPON SYSTEM</span>
+        <h2 class="section-title">4-TIER EVOLVING ARSENAL</h2>
+        <p class="section-subtitle">
+          Collect golden quantum capsules dropped by elite enemies to supercharge your weaponry from twin pulses to intelligent homing micro-missiles.
+        </p>
+      </div>
+
+      <div class="arsenal-interactive-lab">
+        <!-- Interactive Weapon Tier Selector -->
+        <div class="tier-selector-strip">
+          <button class="tier-card active" data-tier="1" id="tier-btn-1">
+            <div class="tier-badge">TIER 1</div>
+            <div class="tier-name">PULSE LASER</div>
+            <div class="tier-stat">Single Forward Beam</div>
+          </button>
+          <button class="tier-card" data-tier="2" id="tier-btn-2">
+            <div class="tier-badge">TIER 2</div>
+            <div class="tier-name">TWIN PLASMA</div>
+            <div class="tier-stat">Dual Parallel Cannons</div>
+          </button>
+          <button class="tier-card" data-tier="3" id="tier-btn-3">
+            <div class="tier-badge">TIER 3</div>
+            <div class="tier-name">SPREAD SALVO</div>
+            <div class="tier-stat">3-Way Broadside Sweep</div>
+          </button>
+          <button class="tier-card" data-tier="4" id="tier-btn-4">
+            <div class="tier-badge">TIER 4</div>
+            <div class="tier-name">OVERCHARGED + HOMING</div>
+            <div class="tier-stat">Micro-Missile Barrage</div>
+          </button>
+        </div>
+
+        <!-- LIVE WEAPON RANGE CANVAS -->
+        <div class="firing-range-container">
+          <div class="range-header">
+            <div class="range-status">
+              <span class="range-dot"></span>
+              <span id="range-tier-label">ACTIVE LOADOUT: TIER 1 PULSE LASER</span>
+            </div>
+            <div class="range-controls">
+              <button class="emp-btn" id="btn-trigger-emp">
+                <span class="emp-icon">⚡</span>
+                <span class="emp-label">TRIGGER EMP BLAST</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="range-canvas-wrap">
+            <canvas id="firing-range-canvas"></canvas>
+            <div class="range-instructions">
+              <span>HOLD MOUSE / TOUCH TO FIRE WEAPON</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- BOSS DOSSIER: THE DREADNOUGHT NOVA             -->
+    <!-- ============================================== -->
+    <section class="section-container" id="dreadnought">
+      <div class="boss-dossier-box">
+        <div class="dossier-header">
+          <div class="dossier-warning">
+            <span class="warn-icon">⚠</span>
+            <span>TACTICAL THREAT ANALYSIS // LEVEL 5 CLASSIFIED</span>
+          </div>
+          <h2 class="dossier-title">FLAGSHIP: DREADNOUGHT NOVA</h2>
+          <p class="dossier-desc">
+            A state-of-the-art multi-phase capital ship boss battle controlled by an authoritative Finite State Machine.
+          </p>
+        </div>
+
+        <div class="dossier-content-grid">
+          <!-- Left: Schematic Blueprint with interactive points -->
+          <div class="schematic-col">
+            <div class="blueprint-card">
+              <img src="assets/images/boss_blueprint.jpg" alt="Dreadnought Nova Technical Schematic" class="blueprint-img">
+              <div class="blueprint-glow-grid"></div>
+            </div>
+          </div>
+
+          <!-- Right: Interactive Phase Breakdown -->
+          <div class="phases-accordion-col">
+            <div class="boss-phase-card active" data-phase="1">
+              <div class="phase-card-top">
+                <span class="phase-tag">PHASE 1</span>
+                <h3>SHIELDED TURRET BARRAGE</h3>
+              </div>
+              <p>
+                The primary fusion reactor core remains completely invulnerable behind a polarized energy barrier. Top and bottom macro-turrets independently acquire and fire aimed heavy plasma volleys.
+              </p>
+              <div class="phase-metrics">
+                <span>TARGETS: 2x MODULAR TURRETS</span>
+                <span>CORE SHIELD: ACTIVE (100%)</span>
+              </div>
+            </div>
+
+            <div class="boss-phase-card" data-phase="2">
+              <div class="phase-card-top">
+                <span class="phase-tag phase-tag-danger">PHASE 2</span>
+                <h3>ENRAGED CORE BULLET HELL</h3>
+              </div>
+              <p>
+                Turrets destroyed! Shields fail, triggering emergency overcharge. The exposed core sweeps vertically, filling the sector with 10-way radial spiral bullet hell patterns and high-velocity plasma lances.
+              </p>
+              <div class="phase-metrics">
+                <span>PATTERN: 10-WAY RADIAL SPIRAL</span>
+                <span>AGILITY: 2.5x EVASION</span>
+              </div>
+            </div>
+
+            <div class="boss-phase-card" data-phase="3">
+              <div class="phase-card-top">
+                <span class="phase-tag phase-tag-gold">PHASE 3</span>
+                <h3>CATACLYSMIC VICTORY SHOWER</h3>
+              </div>
+              <p>
+                Hull breaches trigger cascading secondary detonations. The flagship explodes in an epic screen-clearing light show, showering the void with 18+ magnetic scrap crystals and guaranteed powerup capsules.
+              </p>
+              <div class="phase-metrics">
+                <span>BOUNTY: +500 PTS / 18+ SCRAP</span>
+                <span>STATUS: SECTOR LIBERATED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- INTERACTIVE HANGAR TECH TREE SIMULATOR         -->
+    <!-- ============================================== -->
+    <section class="section-container" id="tech-tree">
+      <div class="section-heading-center">
+        <span class="section-tag">// META-PROGRESSION ARMORY</span>
+        <h2 class="section-title">THE PILOT HANGAR SIMULATOR</h2>
+        <p class="section-subtitle">
+          Test drive the persistent upgrade system right now. Spend scrap collected from sorties to permanently upgrade hull integrity, rate of fire, and tractor beam radius.
+        </p>
+      </div>
+
+      <div class="hangar-sim-box">
+        <!-- Hangar Bank & Controls -->
+        <div class="sim-bank-bar">
+          <div class="bank-scrap-readout">
+            <span class="scrap-icon">⬡</span>
+            <span class="scrap-amount" id="sim-scrap-val">250</span>
+            <span class="scrap-label">SCRAP CRYSTALS</span>
+          </div>
+          <div class="bank-actions">
+            <button class="btn-sm-action" id="btn-add-scrap">+ CLAIM 100 SCRAP</button>
+            <button class="btn-sm-action btn-sm-reset" id="btn-reset-tech">RESET TECH</button>
+          </div>
+        </div>
+
+        <!-- Tech Upgrades Grid -->
+        <div class="upgrades-grid">
+          <!-- Upgrade 1: Hull Armor -->
+          <div class="upgrade-sim-card" id="card-hull">
+            <div class="upg-icon-wrap">🛡️</div>
+            <div class="upg-details">
+              <div class="upg-header">
+                <h4>REINFORCED HULL ARMOR</h4>
+                <span class="upg-level-badge" id="lvl-badge-hull">LVL 1 / 5</span>
+              </div>
+              <p class="upg-desc">Increases ship starting structural integrity by +15 HP per level.</p>
+              <div class="upg-meter">
+                <div class="upg-meter-fill" id="meter-hull" style="width: 20%;"></div>
+              </div>
+              <div class="upg-footer">
+                <span class="stat-calc" id="stat-calc-hull">CURRENT: 100 HP</span>
+                <button class="btn-upgrade-action" id="btn-buy-hull" data-stat="hull">
+                  UPGRADE (<span id="cost-hull">40</span> ⬡)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upgrade 2: Fire Rate -->
+          <div class="upgrade-sim-card" id="card-firerate">
+            <div class="upg-icon-wrap">⚡</div>
+            <div class="upg-details">
+              <div class="upg-header">
+                <h4>PLASMA ACCELERATOR</h4>
+                <span class="upg-level-badge" id="lvl-badge-firerate">LVL 1 / 5</span>
+              </div>
+              <p class="upg-desc">Reduces cannon emitter recycle delay by +7% fire rate per level.</p>
+              <div class="upg-meter">
+                <div class="upg-meter-fill meter-cyan" id="meter-firerate" style="width: 20%;"></div>
+              </div>
+              <div class="upg-footer">
+                <span class="stat-calc" id="stat-calc-firerate">CURRENT: 5.5 SHOTS/SEC</span>
+                <button class="btn-upgrade-action" id="btn-buy-firerate" data-stat="firerate">
+                  UPGRADE (<span id="cost-firerate">50</span> ⬡)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upgrade 3: Tractor Beam -->
+          <div class="upgrade-sim-card" id="card-magnet">
+            <div class="upg-icon-wrap">🧲</div>
+            <div class="upg-details">
+              <div class="upg-header">
+                <h4>QUANTUM TRACTOR BEAM</h4>
+                <span class="upg-level-badge" id="lvl-badge-magnet">LVL 1 / 5</span>
+              </div>
+              <p class="upg-desc">Expands magnetic attraction siphon radius by +35 px per level.</p>
+              <div class="upg-meter">
+                <div class="upg-meter-fill meter-gold" id="meter-magnet" style="width: 20%;"></div>
+              </div>
+              <div class="upg-footer">
+                <span class="stat-calc" id="stat-calc-magnet">CURRENT: 160 PX RADIUS</span>
+                <button class="btn-upgrade-action" id="btn-buy-magnet" data-stat="magnet">
+                  UPGRADE (<span id="cost-magnet">35</span> ⬡)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pre-Run Boosters Strip -->
+        <div class="boosters-sim-section">
+          <div class="boosters-title">TACTICAL PRE-RUN SORTIE BOOSTERS</div>
+          <div class="boosters-grid">
+            <div class="booster-sim-card" id="booster-overclock" data-booster="overclock">
+              <div class="booster-check">○</div>
+              <div class="booster-text">
+                <strong>OVERCLOCK DRIVE</strong>
+                <small>Deploy with Tier 2 Dual Cannons immediately active</small>
+              </div>
+              <span class="booster-badge">EQUIPPABLE</span>
+            </div>
+
+            <div class="booster-sim-card" id="booster-shield" data-booster="shield">
+              <div class="booster-check">○</div>
+              <div class="booster-text">
+                <strong>ENERGY BARRIER</strong>
+                <small>Absorb +40 bonus HP of damage before taking hull damage</small>
+              </div>
+              <span class="booster-badge">EQUIPPABLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- GAMEPLAY SHOWCASE & MOBILE ARCHITECTURE        -->
+    <!-- ============================================== -->
+    <section class="section-container" id="gallery">
+      <div class="section-heading-center">
+        <span class="section-tag">// ANDROID HARDWARE COMPATIBILITY</span>
+        <h2 class="section-title">ULTRAWIDE 20:9 ADAPTIVE VIEWPORT</h2>
+        <p class="section-subtitle">
+          Dynamic viewport expansion ensures your game fills modern 20:9 Android screens without stretched letterboxes or off-screen pop-in.
+        </p>
+      </div>
+
+      <div class="gameplay-showcase-box">
+        <div class="device-frame">
+          <div class="device-speaker"></div>
+          <div class="device-screen">
+            <img src="assets/images/gameplay_action.jpg" alt="Vector Nova Android Gameplay Screen" class="gameplay-screenshot">
+            <div class="gameplay-overlay-tag">LIVE CAPTURE // 2400×1080 NATIVE</div>
+          </div>
+          <div class="device-camera-hole"></div>
+        </div>
+
+        <div class="architecture-specs-list">
+          <div class="spec-highlight">
+            <div class="sh-icon">⚡</div>
+            <div class="sh-content">
+              <h4>Zero-Garbage ObjectPool</h4>
+              <p>120 player lasers and 80 enemy plasma projectiles are pre-allocated at startup, completely eliminating garbage collector micro-stutters during heavy bullet hell bursts.</p>
+            </div>
+          </div>
+
+          <div class="spec-highlight">
+            <div class="sh-icon">🌌</div>
+            <div class="sh-content">
+              <h4>3-Tier Parallax Starfield</h4>
+              <p>High-efficiency procedural canvas shaders calculate 3 distinct depth planes with velocity streaks, running effortlessly on budget mobile GPUs (ARM Mali-G57 MC2).</p>
+            </div>
+          </div>
+
+          <div class="spec-highlight">
+            <div class="sh-icon">🎮</div>
+            <div class="sh-content">
+              <h4>Decoupled EventBus Architecture</h4>
+              <p>Player inputs, weapon fire, scrap collection, and screen shake communicate via a central signal bus, ensuring clean separation of physics, audio, and UI.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- DOWNLOAD / SIDELOADING ACCORDION SECTION       -->
+    <!-- ============================================== -->
+    <section class="section-container download-section" id="download">
+      <div class="download-card-banner">
+        <div class="dl-content">
+          <span class="dl-tag">FREE & OPEN SOURCE // NO MANDATORY ADS</span>
+          <h2 class="dl-title">READY TO PILOT VECTOR NOVA?</h2>
+          <p class="dl-text">
+            Download the signed release APK directly and start flying immediately on your Android phone or tablet.
+          </p>
+
+          <div class="dl-btn-row">
+            <a href="https://github.com/tildemark/Vector-Nova/releases/latest" class="btn btn-dl-primary" id="btn-final-download">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-5.5H8l4-4 4 4h-3v5.5h-2z"/>
+              </svg>
+              <span>DOWNLOAD APK (v1.0.0)</span>
+            </a>
+
+            <a href="https://github.com/tildemark/Vector-Nova" target="_blank" rel="noopener noreferrer" class="btn btn-dl-secondary">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+              <span>VIEW ON GITHUB</span>
+            </a>
+          </div>
+
+          <div class="dl-meta-info">
+            <span>Size: ~45 MB</span> • 
+            <span>Requires Android 8.0 (Oreo) or higher</span> • 
+            <span>GL Compatibility (OpenGL ES 3.2)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sideloading Walkthrough Accordion -->
+      <div class="sideload-guide">
+        <h3 class="guide-title">HOW TO INSTALL ON YOUR PHONE (3 EASY STEPS)</h3>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <h4>Download APK</h4>
+            <p>Tap the download button above on your Android phone's browser (Chrome, Brave, etc.) to fetch <code>vector_nova.apk</code>.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <h4>Allow Unknown Apps</h4>
+            <p>When prompted by Android, tap <strong>Settings</strong> and switch on <em>"Allow from this source"</em> for your browser.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <h4>Install & Launch</h4>
+            <p>Tap <strong>Install</strong>. Once completed, launch Vector Nova and engage the void at 120 FPS!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================== -->
+  <!-- FOOTER                                         -->
+  <!-- ============================================== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col-brand">
+        <div class="footer-brand-title">VECTOR NOVA</div>
+        <p class="footer-tagline">
+          High-performance 2D horizontal sci-fi shoot 'em up built with Godot 4.7 for Android mobile devices.
+        </p>
+        <p class="footer-copy">© 2026 Vector4. Released under the MIT License.</p>
+      </div>
+
+      <div class="footer-col-nav">
+        <h4>NAVIGATION</h4>
+        <a href="#flight-controls">Touch Controls</a>
+        <a href="#arsenal">Weapons & EMP</a>
+        <a href="#dreadnought">The Boss FSM</a>
+        <a href="#tech-tree">Tech Tree Armory</a>
+        <a href="#download">Download APK</a>
+      </div>
+
+      <div class="footer-col-tech">
+        <h4>TECH STACK</h4>
+        <span>Engine: Godot 4.7.2</span>
+        <span>Renderer: OpenGL ES 3.2 Compatibility</span>
+        <span>Language: GDScript 2.0</span>
+        <span>Architecture: ObjectPool & EventBus</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

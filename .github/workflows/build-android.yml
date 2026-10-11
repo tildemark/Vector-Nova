@@ -1,0 +1,59 @@
+name: Build & Export Vector Nova Android APK
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  export-android:
+    name: Export Android APK & AAB
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android Build Tools
+        run: |
+          sdkmanager --install "build-tools;34.0.0" "platforms;android-34" "platform-tools"
+
+      - name: Setup Godot Engine 4.3
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.3.0
+          use-dotnet: false
+          include-templates: true
+
+      - name: Create Build Output Directory
+        run: mkdir -p builds
+
+      - name: Generate Debug Keystore
+        run: |
+          keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
+
+      - name: Import Godot Assets & Cache
+        run: godot --headless --editor --quit
+
+      - name: Export Android Debug APK
+        run: |
+          godot --headless --export-debug "Android" builds/vector_nova.apk
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vector-nova-android-debug-apk
+          path: builds/vector_nova.apk
+          retention-days: 14

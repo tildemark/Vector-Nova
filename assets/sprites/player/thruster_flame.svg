@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 16" width="32" height="16">
+  <defs>
+    <linearGradient id="flameGrad" x1="100%" y1="50%" x2="0%" y2="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#00ffff"/>
+      <stop offset="70%" stop-color="#0066ff"/>
+      <stop offset="100%" stop-color="#9900ff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <polygon points="32,8 14,2 0,8 14,14" fill="url(#flameGrad)"/>
+  <polygon points="32,8 20,4 6,8 20,12" fill="#ffffff" opacity="0.8"/>
+</svg>
