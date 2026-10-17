@@ -64,6 +64,7 @@ func _on_area_entered(other: Area2D) -> void:
 func _collect() -> void:
 	_is_collected = true
 	EventBus.scrap_collected.emit(scrap_value)
+	EventBus.energy_core_collected.emit(8.0) # Grants secondary weapon energy
 	if has_node("/root/GameState"):
 		GameState.add_run_scrap(scrap_value)
 	

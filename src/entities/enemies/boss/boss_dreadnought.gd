@@ -25,6 +25,9 @@ var _radial_angle_offset: float = 0.0
 var _scrap_scene: PackedScene = preload("res://src/entities/items/scrap_item.tscn")
 var _powerup_scene: PackedScene = preload("res://src/entities/items/powerup_item.tscn")
 
+var boss_timer: float = 60.0 # 60-second arcade boss timer
+var _timer_tick: float = 0.0
+
 func _ready() -> void:
 	add_to_group("boss")
 	current_health = max_health
@@ -57,6 +60,17 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_time_alive += delta
 	
+	# Boss combat countdown timer
+	if current_phase != BossPhase.ENTERING and current_phase != BossPhase.DEFEATED:
+		boss_timer -= delta
+		_timer_tick += delta
+		if _timer_tick >= 1.0:
+			_timer_tick = 0.0
+			EventBus.boss_timer_updated.emit(maxi(0, int(boss_timer)))
+			
+		if boss_timer <= 0.0 and current_phase == BossPhase.SHIELDED_TURRETS:
+			_transition_to_enraged()
+	
 	match current_phase:
 		BossPhase.ENTERING:
 			# Slow majestic entry
@@ -64,6 +78,7 @@ func _process(delta: float) -> void:
 			if position.x <= _target_x + 2.0:
 				position.x = _target_x
 				current_phase = BossPhase.SHIELDED_TURRETS
+				EventBus.boss_timer_updated.emit(int(boss_timer))
 				
 		BossPhase.SHIELDED_TURRETS:
 			# Vertical floating drift
@@ -156,6 +171,9 @@ func _die() -> void:
 		core_hitbox.set_deferred("monitoring", false)
 		core_hitbox.set_deferred("monitorable", false)
 		
+	# Bullet cancel and hit-stop crunch
+	EventBus.bullet_cancel_triggered.emit()
+	EventBus.hit_stop_triggered.emit(60.0)
 	EventBus.boss_defeated.emit()
 	
 	# Cascading explosion sequence

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c5q3xrvq77k2e"]
+[gd_scene load_steps=17 format=3 uid="uid://c5q3xrvq77k2e"]
 
 [ext_resource type="Script" path="res://src/scenes/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://src/scenes/starfield.gd" id="2_star"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://src/entities/player/player.tscn" id="6_play"]
 [ext_resource type="Script" path="res://src/managers/spawner_manager.gd" id="7_spaw"]
 [ext_resource type="Texture2D" path="res://assets/sprites/ui/emp_icon.svg" id="8_empico"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/missile_icon.svg" id="9_secico"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp"]
 bg_color = Color(0, 0.9, 1, 0.9)
@@ -30,6 +31,25 @@ corner_radius_bottom_left = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_emp_fill"]
 bg_color = Color(0, 0.95, 1, 0.95)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sec_btn"]
+bg_color = Color(0.16, 0.08, 0.02, 0.75)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.72, 0.1, 0.85)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sec_fill"]
+bg_color = Color(1, 0.7, 0.1, 0.95)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -130,6 +150,18 @@ text = "SCRAP:"
 layout_mode = 2
 text = "⬡ 0"
 
+[node name="ScoreContainer" type="HBoxContainer" parent="UI/HUD/TopBar"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ScoreTitle" type="Label" parent="UI/HUD/TopBar/ScoreContainer"]
+layout_mode = 2
+text = "SCORE:"
+
+[node name="ScoreLabel" type="Label" parent="UI/HUD/TopBar/ScoreContainer"]
+layout_mode = 2
+text = "000000"
+
 [node name="Spacer" type="Control" parent="UI/HUD/TopBar"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -153,7 +185,7 @@ anchor_right = 0.5
 offset_left = -240.0
 offset_top = 64.0
 offset_right = 240.0
-offset_bottom = 108.0
+offset_bottom = 120.0
 grow_horizontal = 2
 mouse_filter = 2
 alignment = 1
@@ -170,6 +202,48 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_bosshp")
 max_value = 1400.0
 value = 1400.0
 show_percentage = false
+
+[node name="BossTimerLabel" type="Label" parent="UI/HUD/BossContainer"]
+layout_mode = 2
+text = "COMBAT ESCAPE: 60s"
+horizontal_alignment = 1
+
+[node name="SecondaryContainer" type="VBoxContainer" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = -140.0
+offset_right = -140.0
+offset_bottom = -30.0
+grow_horizontal = 0
+grow_vertical = 0
+alignment = 1
+
+[node name="SecondaryButton" type="Button" parent="UI/HUD/SecondaryContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_sec_btn")
+icon = ExtResource("9_secico")
+icon_alignment = 1
+expand_icon = true
+
+[node name="SecondaryGaugeBar" type="ProgressBar" parent="UI/HUD/SecondaryContainer"]
+custom_minimum_size = Vector2(80, 8)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_sec_fill")
+value = 100.0
+show_percentage = false
+
+[node name="SecondaryStatusLabel" type="Label" parent="UI/HUD/SecondaryContainer"]
+layout_mode = 2
+text = "SEC: 100%"
+horizontal_alignment = 1
 
 [node name="EMPContainer" type="VBoxContainer" parent="UI/HUD"]
 layout_mode = 1
@@ -234,12 +308,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -280.0
+offset_left = -340.0
 offset_top = -20.0
-offset_right = 280.0
+offset_right = 340.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "TOUCH & DRAG ANYWHERE TO PILOT SHIP • AUTO-FIRING"
+text = "TOUCH & DRAG TO PILOT • DOUBLE-TAP RIGHT SCREEN FOR SECONDARY • AUTO-FIRING"
 horizontal_alignment = 1
 vertical_alignment = 1

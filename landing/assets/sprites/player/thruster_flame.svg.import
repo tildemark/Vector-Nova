@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://qntugq7bu2q"
-path="res://.godot/imported/thruster_flame.svg-0f2ada16326534f55887368e254fbc6b.ctex"
+path="res://.godot/imported/thruster_flame.svg-cfa4a73364ff18e854618861320fb9e4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/thruster_flame.svg"
-dest_files=["res://.godot/imported/thruster_flame.svg-0f2ada16326534f55887368e254fbc6b.ctex"]
+source_file="res://landing/assets/sprites/player/thruster_flame.svg"
+dest_files=["res://.godot/imported/thruster_flame.svg-cfa4a73364ff18e854618861320fb9e4.ctex"]
 
 [params]
 

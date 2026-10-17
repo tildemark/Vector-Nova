@@ -84,6 +84,10 @@ func _destroy() -> void:
 		var t := create_tween()
 		t.tween_property(sprite, "modulate", Color(0.25, 0.25, 0.3, 0.7), 0.3)
 		
+	# Trigger Varth-style bullet cancel and Hit-Stop crunch
+	EventBus.bullet_cancel_triggered.emit()
+	EventBus.hit_stop_triggered.emit(35.0)
+	
 	# Drop burst of scrap
 	for i in range(4):
 		if _scrap_scene:

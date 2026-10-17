@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dx38badjkn6b8"
-path="res://.godot/imported/boss_shield.svg-edc9b78d6d7d2b5217a60b242c844ded.ctex"
+path="res://.godot/imported/boss_shield.svg-ed9fc8c0c288e779d9e4e0ba8c97bd2f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemies/boss/boss_shield.svg"
-dest_files=["res://.godot/imported/boss_shield.svg-edc9b78d6d7d2b5217a60b242c844ded.ctex"]
+source_file="res://landing/assets/sprites/enemies/boss/boss_shield.svg"
+dest_files=["res://.godot/imported/boss_shield.svg-ed9fc8c0c288e779d9e4e0ba8c97bd2f.ctex"]
 
 [params]
 

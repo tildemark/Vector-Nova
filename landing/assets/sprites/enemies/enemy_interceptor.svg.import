@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cqmrc6r4dp33u"
-path="res://.godot/imported/enemy_interceptor.svg-181ece3249a6690c6e457c3b542108ec.ctex"
+path="res://.godot/imported/enemy_interceptor.svg-b315296aa930e94e6fdfd9a8d86ff2b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemies/enemy_interceptor.svg"
-dest_files=["res://.godot/imported/enemy_interceptor.svg-181ece3249a6690c6e457c3b542108ec.ctex"]
+source_file="res://landing/assets/sprites/enemies/enemy_interceptor.svg"
+dest_files=["res://.godot/imported/enemy_interceptor.svg-b315296aa930e94e6fdfd9a8d86ff2b9.ctex"]
 
 [params]
 

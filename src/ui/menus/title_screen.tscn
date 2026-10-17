@@ -1,0 +1,256 @@
+[gd_scene load_steps=7 format=3 uid="uid://cxqj8l72x973a"]
+
+[ext_resource type="Script" path="res://src/ui/menus/title_screen.gd" id="1_title"]
+[ext_resource type="Script" path="res://src/scenes/starfield.gd" id="2_star"]
+[ext_resource type="Texture2D" path="res://assets/sprites/general/vector-nova-logo-512.png" id="3_logo"]
+[ext_resource type="Texture2D" path="res://assets/sprites/general/vector4-logo-512.png" id="4_v4logo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_primary"]
+bg_color = Color(0.02, 0.28, 0.44, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.95, 1, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_secondary"]
+bg_color = Color(0.05, 0.1, 0.18, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.6, 0.8, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal"]
+bg_color = Color(0.04, 0.07, 0.14, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.85, 1, 0.85)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 56
+font_color = Color(0.9, 0.98, 1, 1)
+shadow_size = 12
+shadow_color = Color(0, 0.8, 1, 0.5)
+
+[node name="TitleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_title")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("2_star")
+star_count_layer1 = 90
+star_count_layer2 = 50
+star_count_layer3 = 30
+
+[node name="TopHeader" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 24.0
+offset_right = -40.0
+offset_bottom = 60.0
+grow_horizontal = 2
+
+[node name="HighScoreLabel" type="Label" parent="TopHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.8, 1, 0.9)
+text = "HIGH SCORE: 0"
+
+[node name="Spacer" type="Control" parent="TopHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrapLabel" type="Label" parent="TopHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+text = "SCRAP: ⬡ 150"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -240.0
+offset_right = 320.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="GameLogo" type="TextureRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("3_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "VECTOR NOVA"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 0.85)
+text = "// TACTICAL ARCADE SHMUP • SECTOR ASSAULT //"
+horizontal_alignment = 1
+
+[node name="PromptLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = 40.0
+offset_right = 220.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.9)
+text = "• TOUCH ANYWHERE TO ENGAGE •"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = 10.0
+offset_right = 160.0
+offset_bottom = 190.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="LaunchButton" type="Button" parent="MenuContainer"]
+custom_minimum_size = Vector2(320, 48)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_primary")
+text = "LAUNCH MISSION"
+
+[node name="HangarButton" type="Button" parent="MenuContainer"]
+custom_minimum_size = Vector2(320, 44)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_secondary")
+text = "FLEET HANGAR"
+
+[node name="SettingsButton" type="Button" parent="MenuContainer"]
+custom_minimum_size = Vector2(320, 40)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_secondary")
+text = "SYSTEM SETTINGS"
+
+[node name="FooterBox" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -42.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DevLogo" type="TextureRect" parent="FooterBox"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_v4logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FooterLabel" type="Label" parent="FooterBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.6, 0.8, 0.8)
+text = "DEVELOPED BY VECTOR4 • ARCADE ENGINE v1.2.0"
+vertical_alignment = 1
+
+[node name="SettingsModal" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -140.0
+offset_right = 220.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBox" type="VBoxContainer" parent="SettingsModal"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ModalTitle" type="Label" parent="SettingsModal/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.9, 1, 1)
+text = "// SYSTEM CONFIGURATION //"
+horizontal_alignment = 1
+
+[node name="SFXRow" type="HBoxContainer" parent="SettingsModal/VBox"]
+layout_mode = 2
+
+[node name="SFXLabel" type="Label" parent="SettingsModal/VBox/SFXRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AUDIO SFX & BGM:"
+
+[node name="SFXCheck" type="CheckBox" parent="SettingsModal/VBox/SFXRow"]
+layout_mode = 2
+button_pressed = true
+text = "ENABLED"
+
+[node name="ControlsInfo" type="Label" parent="SettingsModal/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 0.95, 0.8)
+text = "CONTROLS:
+• RELATIVE DRAG TO PILOT SHIP
+• AUTO-FIRING PRIMARY WEAPON
+• DOUBLE-TAP RIGHT SCREEN FOR SECONDARY WEAPON"
+
+[node name="CloseSettingsButton" type="Button" parent="SettingsModal/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_secondary")
+text = "CLOSE"

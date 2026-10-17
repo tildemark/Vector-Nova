@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dm0vyq3w78m9k"]
 
 [ext_resource type="Script" path="res://src/entities/enemies/enemy_scout.gd" id="1_scou"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/enemy_scout.svg" id="2_stex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/scout-512.png" id="2_stex"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s"]
 radius = 16.0
@@ -13,6 +13,7 @@ collision_mask = 5
 script = ExtResource("1_scou")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.14, 0.14)
 texture = ExtResource("2_stex")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

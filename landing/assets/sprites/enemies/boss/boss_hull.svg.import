@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bpypdx4ldkk1l"
-path="res://.godot/imported/boss_hull.svg-6d141d79cfe0159e07b0cc51a36f16de.ctex"
+path="res://.godot/imported/boss_hull.svg-c06608e3d3d8d67e0e7ff0fb01c35001.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemies/boss/boss_hull.svg"
-dest_files=["res://.godot/imported/boss_hull.svg-6d141d79cfe0159e07b0cc51a36f16de.ctex"]
+source_file="res://landing/assets/sprites/enemies/boss/boss_hull.svg"
+dest_files=["res://.godot/imported/boss_hull.svg-c06608e3d3d8d67e0e7ff0fb01c35001.ctex"]
 
 [params]
 

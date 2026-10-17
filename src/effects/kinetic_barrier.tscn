@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://df7xky91qp4n2"]
+
+[ext_resource type="Script" path="res://src/effects/kinetic_barrier.gd" id="1_barr"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_barrier"]
+radius = 42.0
+height = 110.0
+
+[sub_resource type="Gradient" id="Gradient_barrier"]
+colors = PackedColorArray(0.2, 1, 0.6, 0.4, 0.6, 1, 0.9, 1)
+
+[node name="KineticBarrier" type="Area2D"]
+collision_layer = 1
+collision_mask = 6
+script = ExtResource("1_barr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(28, 0)
+shape = SubResource("CapsuleShape2D_barrier")
+
+[node name="ShieldArc" type="Line2D" parent="."]
+points = PackedVector2Array(10, -52, 28, -42, 42, -26, 48, 0, 42, 26, 28, 42, 10, 52)
+width = 12.0
+default_color = Color(0.2, 0.95, 0.7, 0.95)
+gradient = SubResource("Gradient_barrier")
+begin_cap_mode = 2
+end_cap_mode = 2

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 80" width="96" height="80">
+  <defs>
+    <linearGradient id="eliteHull" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#3b0764"/>
+      <stop offset="60%" stop-color="#9333ea"/>
+      <stop offset="100%" stop-color="#f43f5e"/>
+    </linearGradient>
+    <filter id="eliteGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Heavy Outrigger Wings -->
+  <polygon points="86,10 40,24 50,38 90,30" fill="#18181b" stroke="#e11d48" stroke-width="2"/>
+  <polygon points="86,70 40,56 50,42 90,50" fill="#18181b" stroke="#e11d48" stroke-width="2"/>
+  <!-- Heavy Plasma Battery Pods -->
+  <rect x="22" y="16" width="28" height="6" rx="2" fill="#f43f5e" filter="url(#eliteGlow)"/>
+  <rect x="22" y="58" width="28" height="6" rx="2" fill="#f43f5e" filter="url(#eliteGlow)"/>
+  <!-- Main Armored Hull -->
+  <polygon points="6,40 50,18 84,24 74,40 84,56 50,62" fill="url(#eliteHull)" stroke="#fb7185" stroke-width="2.5"/>
+  <!-- Command Core -->
+  <circle cx="56" cy="40" r="10" fill="#f43f5e" filter="url(#eliteGlow)"/>
+  <circle cx="56" cy="40" r="5" fill="#ffffff"/>
+  <!-- Thrusters -->
+  <rect x="84" y="34" width="8" height="12" rx="2" fill="#a855f7"/>
+</svg>

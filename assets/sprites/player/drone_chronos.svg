@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <linearGradient id="chronosGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#7e22ce"/>
+    </linearGradient>
+    <filter id="tachyonGlow">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Rotating Accretion Blades -->
+  <polygon points="24,6 30,20 24,24 18,20" fill="url(#chronosGrad)"/>
+  <polygon points="42,24 28,30 24,24 28,18" fill="url(#chronosGrad)"/>
+  <polygon points="24,42 18,28 24,24 30,28" fill="url(#chronosGrad)"/>
+  <polygon points="6,24 20,18 24,24 20,30" fill="url(#chronosGrad)"/>
+  <!-- Graviton Core -->
+  <circle cx="24" cy="24" r="7" fill="#a855f7" stroke="#f3e8ff" stroke-width="1.5" filter="url(#tachyonGlow)"/>
+  <circle cx="24" cy="24" r="3" fill="#ffffff"/>
+</svg>

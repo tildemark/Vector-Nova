@@ -41,3 +41,19 @@ func clear_all_active() -> void:
 	for child in get_children():
 		if child is Node2D and child.visible:
 			recycle(child)
+
+func cancel_bullets_to_scrap() -> int:
+	var count: int = 0
+	var scrap_scene: PackedScene = load("res://src/entities/items/scrap_item.tscn")
+	var parent_node := get_parent()
+	for child in get_children():
+		if child is Node2D and child.visible:
+			var pos: Vector2 = child.global_position
+			recycle(child)
+			count += 1
+			# Spawn scrap every 2nd cancelled bullet to reward player without overloading
+			if count % 2 == 0 and scrap_scene and parent_node:
+				var scrap := scrap_scene.instantiate() as Node2D
+				scrap.global_position = pos
+				parent_node.call_deferred("add_child", scrap)
+	return count

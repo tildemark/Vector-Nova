@@ -2,6 +2,8 @@
 class_name BaseEnemy
 extends Area2D
 
+signal defeated(enemy: BaseEnemy)
+
 @export var max_health: int = 30
 @export var scrap_reward: int = 15
 @export var ram_damage: int = 25
@@ -41,6 +43,7 @@ func _die() -> void:
 	if _is_dead:
 		return
 	_is_dead = true
+	defeated.emit(self)
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
 	if has_node("CollisionShape2D"):

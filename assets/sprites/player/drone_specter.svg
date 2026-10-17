@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <linearGradient id="specterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Main Chassis -->
+  <polygon points="40,24 16,10 22,24 16,38" fill="url(#specterGrad)" stroke="#7dd3fc" stroke-width="1.5"/>
+  <!-- Twin Vulcan Pods -->
+  <rect x="24" y="14" width="12" height="3" rx="1.5" fill="#e0f2fe"/>
+  <rect x="24" y="31" width="12" height="3" rx="1.5" fill="#e0f2fe"/>
+  <!-- Energy Core -->
+  <circle cx="25" cy="24" r="3.5" fill="#00f0ff" filter="url(#glow)"/>
+</svg>

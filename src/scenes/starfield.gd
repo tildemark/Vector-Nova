@@ -5,6 +5,7 @@ extends Node2D
 @export var star_count_layer1: int = 80 # Distant slow stars
 @export var star_count_layer2: int = 50 # Mid-speed stars
 @export var star_count_layer3: int = 25 # Fast streak stars
+@export var warp_multiplier: float = 1.0 # Multiplier for hyperspace jumps
 
 var _stars_layer1: Array[Vector2] = []
 var _stars_layer2: Array[Vector2] = []
@@ -32,23 +33,24 @@ func _process(delta: float) -> void:
 	if vp_size.y == 0:
 		vp_size.y = 720.0
 
+	var mult := maxf(0.1, warp_multiplier)
 	# Layer 1 (Distant)
 	for i in range(_stars_layer1.size()):
-		_stars_layer1[i].x -= _speeds.x * delta
+		_stars_layer1[i].x -= _speeds.x * mult * delta
 		if _stars_layer1[i].x < 0:
 			_stars_layer1[i].x = vp_size.x
 			_stars_layer1[i].y = randf() * vp_size.y
 
 	# Layer 2 (Mid)
 	for i in range(_stars_layer2.size()):
-		_stars_layer2[i].x -= _speeds.y * delta
+		_stars_layer2[i].x -= _speeds.y * mult * delta
 		if _stars_layer2[i].x < 0:
 			_stars_layer2[i].x = vp_size.x
 			_stars_layer2[i].y = randf() * vp_size.y
 
 	# Layer 3 (Foreground fast streaks)
 	for i in range(_stars_layer3.size()):
-		_stars_layer3[i].x -= _speeds.z * delta
+		_stars_layer3[i].x -= _speeds.z * mult * delta
 		if _stars_layer3[i].x < 0:
 			_stars_layer3[i].x = vp_size.x
 			_stars_layer3[i].y = randf() * vp_size.y
@@ -70,6 +72,8 @@ func _draw() -> void:
 	for star in _stars_layer2:
 		draw_circle(star, 1.8, Color(0.2, 0.9, 1.0, 0.75))
 
-	# Foreground streak lines (gives feeling of forward velocity)
+	# Foreground streak lines (elongates during hyperspace jump)
+	var streak_len: float = 14.0 * maxf(1.0, warp_multiplier * 0.7)
+	var streak_alpha: float = clampf(0.8 + (warp_multiplier * 0.05), 0.8, 1.0)
 	for star in _stars_layer3:
-		draw_line(star, star + Vector2(14, 0), Color(0.8, 0.95, 1.0, 0.9), 2.0)
+		draw_line(star, star + Vector2(streak_len, 0), Color(0.8, 0.95, 1.0, streak_alpha), 2.0)

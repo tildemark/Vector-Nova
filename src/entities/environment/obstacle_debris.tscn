@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3k9p8m7c2x1a"]
+
+[ext_resource type="Script" path="res://src/entities/environment/obstacle_debris.gd" id="1_debris"]
+[ext_resource type="Texture2D" path="res://assets/sprites/environment/debris_asteroid.svg" id="2_ast"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_obs"]
+radius = 48.0
+
+[node name="ObstacleDebris" type="Area2D"]
+collision_layer = 32
+collision_mask = 11
+script = ExtResource("1_debris")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ast")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_obs")

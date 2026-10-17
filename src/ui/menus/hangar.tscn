@@ -72,6 +72,13 @@ offset_top = 20.0
 offset_right = -40.0
 offset_bottom = 60.0
 grow_horizontal = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="Header"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "← TITLE"
 
 [node name="Title" type="Label" parent="Header"]
 layout_mode = 2
@@ -84,6 +91,11 @@ size_flags_horizontal = 3
 [node name="ScrapBalanceLabel" type="Label" parent="Header"]
 layout_mode = 2
 text = "TOTAL SCRAP: ⬡ 150"
+
+[node name="CoreBalanceLabel" type="Label" parent="Header"]
+layout_mode = 2
+text = "HYPER-CORES: ⬢ 0"
+modulate = Color(0.9, 0.4, 1.0, 1.0)
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -102,6 +114,265 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
+
+[node name="EscortBayCard" type="PanelContainer" parent="ScrollContainer/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ScrollContainer/Content/EscortBayCard"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CardTitle" type="Label" parent="ScrollContainer/Content/EscortBayCard/VBox"]
+layout_mode = 2
+text = "— TACTICAL ESCORT DRONE BAY (MAX 2 WINGMEN) —"
+
+[node name="LicenseRow" type="HBoxContainer" parent="ScrollContainer/Content/EscortBayCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="LicenseStatusLabel" type="Label" parent="ScrollContainer/Content/EscortBayCard/VBox/LicenseRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BAY STATUS: LOCKED"
+
+[node name="UnlockLicenseButton" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/LicenseRow"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "UNLOCK LICENSE [500 ⬡ / 5 ⬢]"
+
+[node name="UnlockDualSlotButton" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/LicenseRow"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "UNLOCK DUAL WINGMAN [800 ⬡ / 8 ⬢]"
+
+[node name="PlacementRow" type="HBoxContainer" parent="ScrollContainer/Content/EscortBayCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PlacementTitle" type="Label" parent="ScrollContainer/Content/EscortBayCard/VBox/PlacementRow"]
+layout_mode = 2
+text = "FORMATION PLACEMENT:"
+
+[node name="OrbitModeBtn" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/PlacementRow"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "REVOLVING ORBIT"
+
+[node name="FlankModeBtn" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/PlacementRow"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "LEFT / RIGHT FLANK"
+
+[node name="FrontModeBtn" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/PlacementRow"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "VANGUARD FRONT"
+
+[node name="DroneCarouselRow" type="HBoxContainer" parent="ScrollContainer/Content/EscortBayCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PrevDroneBtn" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/DroneCarouselRow"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "◀"
+
+[node name="DronePreviewBox" type="VBoxContainer" parent="ScrollContainer/Content/EscortBayCard/VBox/DroneCarouselRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="DroneTexture" type="TextureRect" parent="ScrollContainer/Content/EscortBayCard/VBox/DroneCarouselRow/DronePreviewBox"]
+custom_minimum_size = Vector2(100, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DroneNameLabel" type="Label" parent="ScrollContainer/Content/EscortBayCard/VBox/DroneCarouselRow/DronePreviewBox"]
+layout_mode = 2
+text = "SPECTER-D1"
+horizontal_alignment = 1
+
+[node name="DroneRoleLabel" type="Label" parent="ScrollContainer/Content/EscortBayCard/VBox/DroneCarouselRow/DronePreviewBox"]
+layout_mode = 2
+text = "RAPID ASSAULT WINGMAN"
+horizontal_alignment = 1
+
+[node name="NextDroneBtn" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/DroneCarouselRow"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "▶"
+
+[node name="DroneDescLabel" type="Label" parent="ScrollContainer/Content/EscortBayCard/VBox"]
+layout_mode = 2
+text = "Twin plasma vulcan drone with high rate-of-fire support. Absorbs up to 3 enemy bullets before rebooting."
+horizontal_alignment = 1
+
+[node name="DroneActionRow" type="HBoxContainer" parent="ScrollContainer/Content/EscortBayCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="EquipSlot1Btn" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/DroneActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "EQUIP IN SLOT 1"
+
+[node name="EquipSlot2Btn" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/DroneActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "EQUIP IN SLOT 2"
+
+[node name="UnlockDroneBtn" type="Button" parent="ScrollContainer/Content/EscortBayCard/VBox/DroneActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "UNLOCK CHASSIS [350 ⬡ / 4 ⬢]"
+
+[node name="ShipRosterCard" type="PanelContainer" parent="ScrollContainer/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="ScrollContainer/Content/ShipRosterCard"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CardTitle" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox"]
+layout_mode = 2
+text = "— ACTIVE FLEET CHASSIS & SPECIFICATIONS —"
+
+[node name="CarouselRow" type="HBoxContainer" parent="ScrollContainer/Content/ShipRosterCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="PrevShipButton" type="Button" parent="ScrollContainer/Content/ShipRosterCard/VBox/CarouselRow"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "◀"
+
+[node name="ShipPreviewBox" type="VBoxContainer" parent="ScrollContainer/Content/ShipRosterCard/VBox/CarouselRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ShipTexture" type="TextureRect" parent="ScrollContainer/Content/ShipRosterCard/VBox/CarouselRow/ShipPreviewBox"]
+custom_minimum_size = Vector2(180, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ShipNameLabel" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox/CarouselRow/ShipPreviewBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.95, 1, 1)
+text = "VANGUARD-01"
+horizontal_alignment = 1
+
+[node name="ShipRoleLabel" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox/CarouselRow/ShipPreviewBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 0.7)
+text = "// STRIKE ALL-ROUNDER //"
+horizontal_alignment = 1
+
+[node name="NextShipButton" type="Button" parent="ScrollContainer/Content/ShipRosterCard/VBox/CarouselRow"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "▶"
+
+[node name="StatsGrid" type="HBoxContainer" parent="ScrollContainer/Content/ShipRosterCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="HPStat" type="VBoxContainer" parent="ScrollContainer/Content/ShipRosterCard/VBox/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox/StatsGrid/HPStat"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.7, 0.9, 0.8)
+text = "HULL DURABILITY"
+horizontal_alignment = 1
+
+[node name="HPValue" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox/StatsGrid/HPStat"]
+layout_mode = 2
+text = "100 HP"
+horizontal_alignment = 1
+
+[node name="SpeedStat" type="VBoxContainer" parent="ScrollContainer/Content/ShipRosterCard/VBox/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox/StatsGrid/SpeedStat"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.7, 0.9, 0.8)
+text = "AGILITY SPEED"
+horizontal_alignment = 1
+
+[node name="SpeedValue" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox/StatsGrid/SpeedStat"]
+layout_mode = 2
+text = "1.00x"
+horizontal_alignment = 1
+
+[node name="WeaponStat" type="VBoxContainer" parent="ScrollContainer/Content/ShipRosterCard/VBox/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox/StatsGrid/WeaponStat"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.7, 0.9, 0.8)
+text = "TACTICAL SECONDARY"
+horizontal_alignment = 1
+
+[node name="WeaponValue" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox/StatsGrid/WeaponStat"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+text = "SWARM MISSILES"
+horizontal_alignment = 1
+
+[node name="ShipDescLabel" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.9, 0.95, 0.8)
+text = "Standard fleet starfighter. Balanced armor, twin plasma cannons, and 8-missile seeker volley."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="MimicSelectorRow" type="HBoxContainer" parent="ScrollContainer/Content/ShipRosterCard/VBox"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="MimicTitle" type="Label" parent="ScrollContainer/Content/ShipRosterCard/VBox/MimicSelectorRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.45, 1, 1)
+text = "HOLOGRAPHIC MIMIC TARGET:"
+
+[node name="MimicTargetBtn" type="Button" parent="ScrollContainer/Content/ShipRosterCard/VBox/MimicSelectorRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "MIRROR: VANGUARD-01"
+
+[node name="ShipActionButton" type="Button" parent="ScrollContainer/Content/ShipRosterCard/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+text = "EQUIPPED [ACTIVE]"
 
 [node name="UpgradesCard" type="PanelContainer" parent="ScrollContainer/Content"]
 layout_mode = 2

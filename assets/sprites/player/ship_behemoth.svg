@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 64" width="96" height="64">
+  <defs>
+    <linearGradient id="behemothGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#451a03"/>
+      <stop offset="60%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+    <linearGradient id="armorPlates" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#3f3f46"/>
+    </linearGradient>
+    <filter id="behemothGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Heavy Outrigger Armor Pods -->
+  <polygon points="14,8 52,14 46,26 12,24" fill="url(#armorPlates)" stroke="#f59e0b" stroke-width="2"/>
+  <polygon points="14,56 52,50 46,38 12,40" fill="url(#armorPlates)" stroke="#f59e0b" stroke-width="2"/>
+  <!-- Twin Heavy Siege Cannon Barrels -->
+  <rect x="52" y="18" width="30" height="6" rx="2" fill="#f59e0b" stroke="#78350f" stroke-width="1.5"/>
+  <rect x="52" y="40" width="30" height="6" rx="2" fill="#f59e0b" stroke="#78350f" stroke-width="1.5"/>
+  <!-- Armored Center Citadel -->
+  <polygon points="84,32 50,14 22,18 16,32 22,46 50,50" fill="url(#behemothGrad)" stroke="#fbbf24" stroke-width="2.5"/>
+  <!-- Reinforced Cockpit Slit -->
+  <polygon points="68,32 56,28 50,32 56,36" fill="#fef08a" filter="url(#behemothGlow)"/>
+  <!-- Massive Twin Engines -->
+  <rect x="10" y="22" width="8" height="8" rx="2" fill="#b45309"/>
+  <rect x="10" y="34" width="8" height="8" rx="2" fill="#b45309"/>
+</svg>

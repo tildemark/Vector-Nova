@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://dm43qj81vp2a1"]
+
+[ext_resource type="Script" path="res://src/effects/hyper_beam.gd" id="1_beam"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_beam"]
+size = Vector2(1200, 24)
+
+[sub_resource type="Gradient" id="Gradient_beam"]
+colors = PackedColorArray(1, 0.2, 0.4, 0.95, 1, 0.95, 1, 1)
+
+[node name="HyperBeam" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_beam")
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 1200, 0)
+width = 18.0
+default_color = Color(1, 0.25, 0.45, 1)
+gradient = SubResource("Gradient_beam")
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(600, 0)
+shape = SubResource("RectangleShape2D_beam")

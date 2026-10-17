@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b8oisexm7dnsv"
-path="res://.godot/imported/enemy_scout.svg-24114ec0f59a4a69a3dd2fd7c5cc46af.ctex"
+path="res://.godot/imported/enemy_scout.svg-44fa59691c2787783157299ea2f106f1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemies/enemy_scout.svg"
-dest_files=["res://.godot/imported/enemy_scout.svg-24114ec0f59a4a69a3dd2fd7c5cc46af.ctex"]
+source_file="res://landing/assets/sprites/enemies/enemy_scout.svg"
+dest_files=["res://.godot/imported/enemy_scout.svg-44fa59691c2787783157299ea2f106f1.ctex"]
 
 [params]
 

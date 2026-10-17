@@ -99,6 +99,8 @@ signal player_damaged(current_hp: int, max_hp: int)
 signal player_died()
 signal special_gauge_changed(ratio: float)
 signal weapon_upgraded(tier: int)
+signal secondary_energy_changed(current_energy: float, max_energy: float)
+signal secondary_weapon_fired(weapon_type: String)
 
 # Enemies & Boss
 signal enemy_destroyed(enemy_type: String, global_pos: Vector2, scrap_value: int)
@@ -108,6 +110,7 @@ signal boss_defeated()
 
 # Economy & Drops
 signal scrap_collected(amount: int)
+signal energy_core_collected(amount: float)
 signal powerup_picked(powerup_type: String)
 
 ```

@@ -1,0 +1,77 @@
+[gd_scene load_steps=5 format=3 uid="uid://b7vyk4r32pm6n"]
+
+[ext_resource type="Script" path="res://src/ui/menus/warp_screen.gd" id="1_warp"]
+[ext_resource type="Script" path="res://src/scenes/starfield.gd" id="2_star"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_warp_bg"]
+bg_color = Color(0.04, 0.08, 0.15, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_warp_fill"]
+bg_color = Color(0, 0.95, 1, 0.95)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="WarpScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_warp")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("2_star")
+star_count_layer1 = 120
+star_count_layer2 = 70
+star_count_layer3 = 45
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="MissionLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.8, 1, 1)
+text = "// DEPLOYING TO COMBAT SECTOR 01 //"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.95, 1, 1)
+text = "WARP DRIVE CHARGING..."
+horizontal_alignment = 1
+
+[node name="WarpProgressBar" type="ProgressBar" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(460, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_warp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_warp_fill")
+show_percentage = false
+
+[node name="FlashOverlay" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)

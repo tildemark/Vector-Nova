@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dru6w75yuf7hv"
-path="res://.godot/imported/powerup_capsule.svg-d93c04691240aa69fb49f6408c216003.ctex"
+path="res://.godot/imported/powerup_capsule.svg-99a773a6da2e7daa596efedf9e6ae2e0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/items/powerup_capsule.svg"
-dest_files=["res://.godot/imported/powerup_capsule.svg-d93c04691240aa69fb49f6408c216003.ctex"]
+source_file="res://landing/assets/sprites/items/powerup_capsule.svg"
+dest_files=["res://.godot/imported/powerup_capsule.svg-99a773a6da2e7daa596efedf9e6ae2e0.ctex"]
 
 [params]
 
