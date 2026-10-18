@@ -10,10 +10,11 @@ enum BossPhase { ENTERING, SHIELDED_TURRETS, ENRAGED_CORE, DEFEATED }
 var enemy_bullet_pool: ObjectPool = null
 var current_phase: BossPhase = BossPhase.ENTERING
 
-@onready var shield_sprite: Sprite2D = $ShieldSprite
+@onready var shield_sprite: Sprite2D = get_node_or_null("ShieldSprite")
 @onready var hull_sprite: Sprite2D = $HullSprite
 @onready var core_hitbox: Area2D = $CoreHitbox
 @onready var weakpoints_container: Node2D = $WeakPoints
+@onready var turret_weakpoints_container: Node2D = get_node_or_null("TurretWeakPoints")
 
 var _active_turrets: int = 0
 var _time_alive: float = 0.0
@@ -32,10 +33,10 @@ func _ready() -> void:
 	add_to_group("boss")
 	current_health = max_health
 	
-	# Compute responsive target position on right side
+	# Compute responsive target position on right side (moved left to clearly display full wings)
 	var vp_size := get_viewport_rect().size
 	var width := vp_size.x if vp_size.x > 0 else 1280.0
-	_target_x = width - 220.0
+	_target_x = width - 360.0
 	_center_y = (vp_size.y if vp_size.y > 0 else 720.0) / 2.0
 	position.x = width + 260.0
 	position.y = _center_y
@@ -47,15 +48,25 @@ func _ready() -> void:
 		core_hitbox.add_to_group("enemies")
 		core_hitbox.add_to_group("boss_weakspots")
 		
-	# Setup child turrets
-	var weakpoints := weakpoints_container.get_children()
-	_active_turrets = weakpoints.size()
-	for wp in weakpoints:
-		if wp is BossWeakspot:
-			wp.enemy_bullet_pool = enemy_bullet_pool
-			wp.destroyed.connect(_on_weakpoint_destroyed)
+	# Setup all child weakpoints (wings and turrets)
+	_setup_weakpoints()
 			
 	EventBus.boss_spawned.emit("Dreadnought Nova", max_health)
+
+func _setup_weakpoints() -> void:
+	var all_weakpoints: Array[Node] = []
+	if weakpoints_container:
+		all_weakpoints.append_array(weakpoints_container.get_children())
+	if turret_weakpoints_container:
+		all_weakpoints.append_array(turret_weakpoints_container.get_children())
+		
+	_active_turrets = 0
+	for wp in all_weakpoints:
+		if wp is BossWeakspot:
+			_active_turrets += 1
+			if enemy_bullet_pool:
+				wp.enemy_bullet_pool = enemy_bullet_pool
+			wp.destroyed.connect(_on_weakpoint_destroyed)
 
 func _process(delta: float) -> void:
 	_time_alive += delta
@@ -103,6 +114,9 @@ func _process(delta: float) -> void:
 
 func _on_weakpoint_destroyed() -> void:
 	_active_turrets -= 1
+	# Destroying a weakpoint directly damages boss health!
+	take_damage(250)
+	
 	if _active_turrets <= 0 and current_phase == BossPhase.SHIELDED_TURRETS:
 		_transition_to_enraged()
 
@@ -130,7 +144,7 @@ func _execute_bullet_hell_pattern() -> void:
 	if not enemy_bullet_pool:
 		return
 		
-	var core_pos := global_position + Vector2(-60, 0)
+	var core_pos := global_position
 	
 	# 10-Way radial spiral ring
 	_radial_angle_offset += 0.2
@@ -146,7 +160,7 @@ func _execute_bullet_hell_pattern() -> void:
 	enemy_bullet_pool.spawn(core_pos, Vector2.LEFT, 700.0, 18, true, false)
 
 func take_damage(amount: int) -> void:
-	if current_phase != BossPhase.ENRAGED_CORE:
+	if current_phase == BossPhase.DEFEATED:
 		return
 		
 	current_health = maxi(current_health - amount, 0)

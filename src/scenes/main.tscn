@@ -7,8 +7,12 @@
 [ext_resource type="PackedScene" path="res://src/pools/enemy_bullet.tscn" id="5_ebul"]
 [ext_resource type="PackedScene" path="res://src/entities/player/player.tscn" id="6_play"]
 [ext_resource type="Script" path="res://src/managers/spawner_manager.gd" id="7_spaw"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/emp_icon.svg" id="8_empico"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/missile_icon.svg" id="9_secico"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/emp_button.png" id="8_empico"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/secondary_button.png" id="9_secico"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/energy_gauge_frame.png" id="10_gframe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/energy_gauge_fill.png" id="11_gfill"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_clean"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp"]
 bg_color = Color(0, 0.9, 1, 0.9)
@@ -215,33 +219,40 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -230.0
-offset_top = -140.0
-offset_right = -140.0
-offset_bottom = -30.0
+offset_left = -260.0
+offset_top = -155.0
+offset_right = -150.0
+offset_bottom = -25.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_constants/separation = 4
 alignment = 1
 
 [node name="SecondaryButton" type="Button" parent="UI/HUD/SecondaryContainer"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_sec_btn")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_clean")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_clean")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_clean")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_clean")
 icon = ExtResource("9_secico")
 icon_alignment = 1
 expand_icon = true
 
-[node name="SecondaryGaugeBar" type="ProgressBar" parent="UI/HUD/SecondaryContainer"]
-custom_minimum_size = Vector2(80, 8)
+[node name="SecondaryGaugeBar" type="TextureProgressBar" parent="UI/HUD/SecondaryContainer"]
+custom_minimum_size = Vector2(100, 28)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/fill = SubResource("StyleBoxFlat_sec_fill")
+max_value = 100.0
 value = 100.0
-show_percentage = false
+nine_patch_stretch = true
+texture_under = ExtResource("10_gframe")
+texture_progress = ExtResource("11_gfill")
 
 [node name="SecondaryStatusLabel" type="Label" parent="UI/HUD/SecondaryContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "SEC: 100%"
 horizontal_alignment = 1
 
@@ -252,33 +263,40 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -130.0
-offset_top = -140.0
-offset_right = -40.0
-offset_bottom = -30.0
+offset_left = -140.0
+offset_top = -155.0
+offset_right = -30.0
+offset_bottom = -25.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_constants/separation = 4
 alignment = 1
 
 [node name="EMPButton" type="Button" parent="UI/HUD/EMPContainer"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_emp")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_clean")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_clean")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_clean")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_clean")
 icon = ExtResource("8_empico")
 icon_alignment = 1
 expand_icon = true
 
-[node name="EMPChargeBar" type="ProgressBar" parent="UI/HUD/EMPContainer"]
-custom_minimum_size = Vector2(80, 8)
+[node name="EMPChargeBar" type="TextureProgressBar" parent="UI/HUD/EMPContainer"]
+custom_minimum_size = Vector2(100, 28)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/fill = SubResource("StyleBoxFlat_emp_fill")
+max_value = 100.0
 value = 50.0
-show_percentage = false
+nine_patch_stretch = true
+texture_under = ExtResource("10_gframe")
+texture_progress = ExtResource("11_gfill")
 
 [node name="EMPStatusLabel" type="Label" parent="UI/HUD/EMPContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "EMP: 50%"
 horizontal_alignment = 1
 

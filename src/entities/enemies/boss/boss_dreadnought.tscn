@@ -1,37 +1,41 @@
-[gd_scene load_steps=8 format=3 uid="uid://dmqv7m8w9y2x4"]
+[gd_scene load_steps=7 format=3 uid="uid://dmqv7m8w9y2x4"]
 
 [ext_resource type="Script" path="res://src/entities/enemies/boss/boss_dreadnought.gd" id="1_drea"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/boss/boss_hull.svg" id="2_hull"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/boss/boss_shield.svg" id="3_shie"]
-[ext_resource type="Script" path="res://src/entities/enemies/boss/boss_core_hitbox.gd" id="4_core"]
-[ext_resource type="PackedScene" path="res://src/entities/enemies/boss/boss_weakspot.tscn" id="5_weak"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/boss/dreadnought_nova_core.png" id="2_core_tex"]
+[ext_resource type="Script" path="res://src/entities/enemies/boss/boss_core_hitbox.gd" id="3_core"]
+[ext_resource type="PackedScene" path="res://src/entities/enemies/boss/boss_wing_weakspot.tscn" id="4_wing"]
+[ext_resource type="PackedScene" path="res://src/entities/enemies/boss/boss_weakspot.tscn" id="5_turret"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c"]
-radius = 34.0
+radius = 48.0
 
 [node name="BossDreadnought" type="Node2D"]
 script = ExtResource("1_drea")
 
-[node name="HullSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_hull")
+[node name="WeakPoints" type="Node2D" parent="."]
 
-[node name="ShieldSprite" type="Sprite2D" parent="."]
-position = Vector2(-40, 0)
-texture = ExtResource("3_shie")
+[node name="TopWing" parent="WeakPoints" instance=ExtResource("4_wing")]
+position = Vector2(40, -175)
+scale = Vector2(0.55, 0.55)
+
+[node name="BottomWing" parent="WeakPoints" instance=ExtResource("4_wing")]
+position = Vector2(40, 175)
+scale = Vector2(0.55, -0.55)
+
+[node name="HullSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("2_core_tex")
 
 [node name="CoreHitbox" type="Area2D" parent="."]
-position = Vector2(-60, 0)
+position = Vector2(0, 0)
 collision_layer = 2
 collision_mask = 5
-script = ExtResource("4_core")
+script = ExtResource("3_core")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CoreHitbox"]
 shape = SubResource("CircleShape2D_c")
 
-[node name="WeakPoints" type="Node2D" parent="."]
+[node name="TurretWeakPoints" type="Node2D" parent="."]
 
-[node name="TopTurret" parent="WeakPoints" instance=ExtResource("5_weak")]
-position = Vector2(25, -55)
-
-[node name="BottomTurret" parent="WeakPoints" instance=ExtResource("5_weak")]
-position = Vector2(25, 55)
+[node name="CoreTurret" parent="TurretWeakPoints" instance=ExtResource("5_turret")]
+position = Vector2(0, 0)

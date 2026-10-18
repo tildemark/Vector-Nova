@@ -18,12 +18,12 @@ extends Node2D
 
 # EMP Special Button references
 @onready var emp_button: Button = $UI/HUD/EMPContainer/EMPButton
-@onready var emp_charge_bar: ProgressBar = $UI/HUD/EMPContainer/EMPChargeBar
+@onready var emp_charge_bar: TextureProgressBar = $UI/HUD/EMPContainer/EMPChargeBar
 @onready var emp_status_label: Label = $UI/HUD/EMPContainer/EMPStatusLabel
 
 # Secondary Tactical Weapon references
 @onready var sec_button: Button = $UI/HUD/SecondaryContainer/SecondaryButton
-@onready var sec_gauge_bar: ProgressBar = $UI/HUD/SecondaryContainer/SecondaryGaugeBar
+@onready var sec_gauge_bar: TextureProgressBar = $UI/HUD/SecondaryContainer/SecondaryGaugeBar
 @onready var sec_status_label: Label = $UI/HUD/SecondaryContainer/SecondaryStatusLabel
 
 # Boss HUD references

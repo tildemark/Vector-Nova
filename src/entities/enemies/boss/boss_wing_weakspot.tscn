@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7y8wkpt9x1m2"]
+
+[ext_resource type="Script" path="res://src/entities/enemies/boss/boss_weakspot.gd" id="1_weak"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/boss/dreadnought_wing.png" id="2_wtex"]
+
+[node name="BossWingWeakspot" type="Area2D"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_weak")
+weakpoint_type = 1
+max_health = 260
+current_health = 260
+shoot_interval = 2.0
+enables_tracking = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_wtex")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-208, -69, -6, -136, 222, -223, 194, -106, 24, 124, -181, 224, -208, 94)
