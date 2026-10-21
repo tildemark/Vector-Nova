@@ -66,6 +66,20 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bosshp_wing"]
+bg_color = Color(0.2, 0.75, 1.0, 0.95)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bosshp_turret"]
+bg_color = Color(1.0, 0.65, 0.1, 0.95)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
@@ -171,6 +185,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
+[node name="SettingsButton" type="Button" parent="UI/HUD/TopBar"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_emp")
+text = "SETTINGS"
+
 [node name="HangarButton" type="Button" parent="UI/HUD/TopBar"]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_emp")
@@ -203,8 +222,89 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(480, 14)
 layout_mode = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_bosshp")
-max_value = 1400.0
-value = 1400.0
+max_value = 2400.0
+value = 2400.0
+show_percentage = false
+
+[node name="WeakpointBarsRow" type="HBoxContainer" parent="UI/HUD/BossContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="TopWingBox" type="HBoxContainer" parent="UI/HUD/BossContainer/WeakpointBarsRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="UI/HUD/BossContainer/WeakpointBarsRow/TopWingBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "TOP WING:"
+
+[node name="TopWingHPBar" type="ProgressBar" parent="UI/HUD/BossContainer/WeakpointBarsRow/TopWingBox"]
+custom_minimum_size = Vector2(90, 10)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_bosshp_wing")
+max_value = 800.0
+value = 800.0
+show_percentage = false
+
+[node name="TurretTopBox" type="HBoxContainer" parent="UI/HUD/BossContainer/WeakpointBarsRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="UI/HUD/BossContainer/WeakpointBarsRow/TurretTopBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.65, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "TOP CANNON:"
+
+[node name="TopTurretHPBar" type="ProgressBar" parent="UI/HUD/BossContainer/WeakpointBarsRow/TurretTopBox"]
+custom_minimum_size = Vector2(80, 10)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_bosshp_turret")
+max_value = 850.0
+value = 850.0
+show_percentage = false
+
+[node name="TurretBotBox" type="HBoxContainer" parent="UI/HUD/BossContainer/WeakpointBarsRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="UI/HUD/BossContainer/WeakpointBarsRow/TurretBotBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.65, 0.1, 1)
+theme_override_font_sizes/font_size = 11
+text = "BOT CANNON:"
+
+[node name="BottomTurretHPBar" type="ProgressBar" parent="UI/HUD/BossContainer/WeakpointBarsRow/TurretBotBox"]
+custom_minimum_size = Vector2(80, 10)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_bosshp_turret")
+max_value = 850.0
+value = 850.0
+show_percentage = false
+
+[node name="BottomWingBox" type="HBoxContainer" parent="UI/HUD/BossContainer/WeakpointBarsRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="UI/HUD/BossContainer/WeakpointBarsRow/BottomWingBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "BOT WING:"
+
+[node name="BottomWingHPBar" type="ProgressBar" parent="UI/HUD/BossContainer/WeakpointBarsRow/BottomWingBox"]
+custom_minimum_size = Vector2(80, 10)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_bosshp_wing")
+max_value = 800.0
+value = 800.0
 show_percentage = false
 
 [node name="BossTimerLabel" type="Label" parent="UI/HUD/BossContainer"]
@@ -335,3 +435,96 @@ grow_vertical = 2
 text = "TOUCH & DRAG TO PILOT • DOUBLE-TAP RIGHT SCREEN FOR SECONDARY • AUTO-FIRING"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SettingsModal" type="PanelContainer" parent="UI/HUD"]
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -210.0
+offset_right = 260.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_emp")
+
+[node name="VBox" type="VBoxContainer" parent="UI/HUD/SettingsModal"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ModalTitle" type="Label" parent="UI/HUD/SettingsModal/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.9, 1, 1)
+text = "// MISSION PAUSED //"
+horizontal_alignment = 1
+
+[node name="SFXRow" type="HBoxContainer" parent="UI/HUD/SettingsModal/VBox"]
+layout_mode = 2
+
+[node name="SFXLabel" type="Label" parent="UI/HUD/SettingsModal/VBox/SFXRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SFX EFFECTS:"
+
+[node name="SFXCheck" type="CheckBox" parent="UI/HUD/SettingsModal/VBox/SFXRow"]
+layout_mode = 2
+button_pressed = true
+text = "ENABLED"
+
+[node name="SFXVolRow" type="HBoxContainer" parent="UI/HUD/SettingsModal/VBox"]
+layout_mode = 2
+
+[node name="SFXVolLabel" type="Label" parent="UI/HUD/SettingsModal/VBox/SFXVolRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 0.95, 0.8)
+text = "SFX VOLUME:"
+
+[node name="SFXSlider" type="HSlider" parent="UI/HUD/SettingsModal/VBox/SFXVolRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="BGMRow" type="HBoxContainer" parent="UI/HUD/SettingsModal/VBox"]
+layout_mode = 2
+
+[node name="BGMLabel" type="Label" parent="UI/HUD/SettingsModal/VBox/BGMRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "MUSIC (BGM):"
+
+[node name="BGMCheck" type="CheckBox" parent="UI/HUD/SettingsModal/VBox/BGMRow"]
+layout_mode = 2
+button_pressed = true
+text = "ENABLED"
+
+[node name="BGMVolRow" type="HBoxContainer" parent="UI/HUD/SettingsModal/VBox"]
+layout_mode = 2
+
+[node name="BGMVolLabel" type="Label" parent="UI/HUD/SettingsModal/VBox/BGMVolRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 0.95, 0.8)
+text = "MUSIC VOLUME:"
+
+[node name="BGMSlider" type="HSlider" parent="UI/HUD/SettingsModal/VBox/BGMVolRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="CloseSettingsButton" type="Button" parent="UI/HUD/SettingsModal/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_emp")
+text = "RESUME MISSION"

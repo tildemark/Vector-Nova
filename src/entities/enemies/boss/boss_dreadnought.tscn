@@ -37,5 +37,8 @@ shape = SubResource("CircleShape2D_c")
 
 [node name="TurretWeakPoints" type="Node2D" parent="."]
 
-[node name="CoreTurret" parent="TurretWeakPoints" instance=ExtResource("5_turret")]
-position = Vector2(0, 0)
+[node name="TopTurret" parent="TurretWeakPoints" instance=ExtResource("5_turret")]
+position = Vector2(-75, -82)
+
+[node name="BottomTurret" parent="TurretWeakPoints" instance=ExtResource("5_turret")]
+position = Vector2(-75, 82)

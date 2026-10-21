@@ -39,14 +39,7 @@ func _process(delta: float) -> void:
 	if global_position.x < -100.0:
 		queue_free()
 
-var _powerup_scene: PackedScene = preload("res://src/entities/items/powerup_item.tscn")
-
 func _die() -> void:
-	# 70% chance to drop powerup capsule
-	if randf() <= 0.70 and _powerup_scene:
-		var p_item := _powerup_scene.instantiate() as Node2D
-		p_item.global_position = global_position
-		get_parent().call_deferred("add_child", p_item)
 	super._die()
 
 func _fire_dual_plasma() -> void:

@@ -22,6 +22,7 @@ var _boss_active: bool = false
 var _red_formation_total: int = 5
 var _red_formation_killed: int = 0
 var _red_formation_dropped: bool = false
+var _stage_powerups_spawned: int = 0
 
 func _ready() -> void:
 	EventBus.boss_defeated.connect(_on_boss_defeated)
@@ -117,10 +118,7 @@ func _spawn_red_squadron() -> void:
 
 func _on_red_formation_cleared(pos: Vector2) -> void:
 	EventBus.formation_completed.emit("RED_SQUADRON")
-	if powerup_scene:
-		var p_item := powerup_scene.instantiate() as Node2D
-		p_item.global_position = pos
-		get_parent().call_deferred("add_child", p_item)
+	# Scouts and interceptors never drop powerups per design specification
 
 func _spawn_wave_2() -> void:
 	var x := _get_spawn_x()
@@ -143,12 +141,21 @@ func _spawn_wave_3() -> void:
 	elite.global_position = Vector2(x + 80, 360)
 	elite.enemy_bullet_pool = enemy_bullet_pool
 	
-	# Guaranteed powerup drop on mid-boss destruction
+	# Mid-Boss Heavy Elite Cruiser: sole powerup source in Stage 1
+	# 1 guaranteed powerup, plus a low 15% chance to drop a 2nd
 	elite.defeated.connect(func(e: BaseEnemy):
-		if powerup_scene:
+		if powerup_scene and _stage_powerups_spawned < 1:
+			_stage_powerups_spawned += 1
 			var p := powerup_scene.instantiate() as Node2D
 			p.global_position = e.global_position
 			get_parent().call_deferred("add_child", p)
+			
+			# Low 15% chance for a 2nd drop
+			if randf() <= 0.15:
+				_stage_powerups_spawned += 1
+				var p2 := powerup_scene.instantiate() as Node2D
+				p2.global_position = e.global_position + Vector2(25, -20)
+				get_parent().call_deferred("add_child", p2)
 	)
 	
 	get_parent().add_child(elite)
@@ -159,12 +166,6 @@ func _spawn_wave_4() -> void:
 	_spawn_enemy(interceptor_scene, Vector2(x, 460))
 	await get_tree().create_timer(0.8).timeout
 	await _spawn_scout_line(4, 0.35)
-	
-	# Pre-boss refresh power-up capsule
-	if powerup_scene:
-		var p := powerup_scene.instantiate() as Node2D
-		p.global_position = Vector2(x + 80, 360)
-		get_parent().call_deferred("add_child", p)
 
 func _spawn_endless_wave(wave_num: int) -> void:
 	EventBus.wave_started.emit(wave_num)

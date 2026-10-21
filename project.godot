@@ -19,7 +19,7 @@ config/description="Fast-paced 2D sci-fi horizontal shoot 'em up built for mobil
 config/version="1.0.0"
 run/main_scene="res://src/ui/menus/title_screen.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
 
 [autoload]
 

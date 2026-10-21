@@ -210,22 +210,22 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -140.0
-offset_right = 220.0
-offset_bottom = 140.0
+offset_left = -260.0
+offset_top = -210.0
+offset_right = 260.0
+offset_bottom = 210.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
 
 [node name="VBox" type="VBoxContainer" parent="SettingsModal"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 
 [node name="ModalTitle" type="Label" parent="SettingsModal/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.9, 1, 1)
-text = "// SYSTEM CONFIGURATION //"
+text = "// SYSTEM AUDIO & SETTINGS //"
 horizontal_alignment = 1
 
 [node name="SFXRow" type="HBoxContainer" parent="SettingsModal/VBox"]
@@ -234,23 +234,70 @@ layout_mode = 2
 [node name="SFXLabel" type="Label" parent="SettingsModal/VBox/SFXRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "AUDIO SFX & BGM:"
+text = "SFX EFFECTS:"
 
 [node name="SFXCheck" type="CheckBox" parent="SettingsModal/VBox/SFXRow"]
 layout_mode = 2
 button_pressed = true
 text = "ENABLED"
 
-[node name="ControlsInfo" type="Label" parent="SettingsModal/VBox"]
+[node name="SFXVolRow" type="HBoxContainer" parent="SettingsModal/VBox"]
+layout_mode = 2
+
+[node name="SFXVolLabel" type="Label" parent="SettingsModal/VBox/SFXVolRow"]
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.85, 0.95, 0.8)
+text = "SFX VOLUME:"
+
+[node name="SFXSlider" type="HSlider" parent="SettingsModal/VBox/SFXVolRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="BGMRow" type="HBoxContainer" parent="SettingsModal/VBox"]
+layout_mode = 2
+
+[node name="BGMLabel" type="Label" parent="SettingsModal/VBox/BGMRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "MUSIC (BGM):"
+
+[node name="BGMCheck" type="CheckBox" parent="SettingsModal/VBox/BGMRow"]
+layout_mode = 2
+button_pressed = true
+text = "ENABLED"
+
+[node name="BGMVolRow" type="HBoxContainer" parent="SettingsModal/VBox"]
+layout_mode = 2
+
+[node name="BGMVolLabel" type="Label" parent="SettingsModal/VBox/BGMVolRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 0.95, 0.8)
+text = "MUSIC VOLUME:"
+
+[node name="BGMSlider" type="HSlider" parent="SettingsModal/VBox/BGMVolRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="ControlsInfo" type="Label" parent="SettingsModal/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.7, 0.85, 0.8)
 text = "CONTROLS:
-• RELATIVE DRAG TO PILOT SHIP
-• AUTO-FIRING PRIMARY WEAPON
-• DOUBLE-TAP RIGHT SCREEN FOR SECONDARY WEAPON"
+• DRAG TO FLY (SMOOTH RELATIVE OFFSET)
+• AUTOMATIC PRIMARY FIRING
+• DOUBLE-TAP RIGHT SCREEN FOR SECONDARY"
 
 [node name="CloseSettingsButton" type="Button" parent="SettingsModal/VBox"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_secondary")
-text = "CLOSE"
+text = "SAVE & CLOSE"

@@ -19,7 +19,7 @@ func _ready() -> void:
 		add_child(bullet)
 		_available_pool.append(bullet)
 
-func spawn(spawn_pos: Vector2, direction: Vector2, speed: float, damage: int, is_enemy: bool = false, is_homing: bool = false) -> Node2D:
+func spawn(spawn_pos: Vector2, direction: Vector2, speed: float, damage: int, is_enemy: bool = false, is_homing: bool = false, scale_mult: float = 1.0) -> Node2D:
 	if _available_pool.is_empty():
 		return null # Pool exhausted; drops shot safely instead of causing garbage collector stutter
 		
@@ -29,7 +29,7 @@ func spawn(spawn_pos: Vector2, direction: Vector2, speed: float, damage: int, is
 	bullet.set_process(true)
 	
 	if bullet.has_method("initialize"):
-		bullet.initialize(direction, speed, damage, self, is_enemy, is_homing)
+		bullet.initialize(direction, speed, damage, self, is_enemy, is_homing, scale_mult)
 	return bullet
 
 func recycle(bullet: Node2D) -> void:

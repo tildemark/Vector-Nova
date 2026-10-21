@@ -8,8 +8,8 @@ extends Area2D
 var player_node: Node2D = null
 var player_bullet_pool: ObjectPool = null
 
-var fire_delay: float = 0.25
-var projectile_damage: int = 10
+var fire_delay: float = 0.50
+var projectile_damage: int = 3
 var max_shield_absorb: int = 3
 var current_shield: int = 3
 var is_rebooting: bool = false

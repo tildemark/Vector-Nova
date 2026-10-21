@@ -4,8 +4,8 @@ extends Node2D
 
 enum BossPhase { ENTERING, SHIELDED_TURRETS, ENRAGED_CORE, DEFEATED }
 
-@export var max_health: int = 1400
-@export var current_health: int = 1400
+@export var max_health: int = 2400
+@export var current_health: int = 2400
 
 var enemy_bullet_pool: ObjectPool = null
 var current_phase: BossPhase = BossPhase.ENTERING
@@ -28,6 +28,8 @@ var _powerup_scene: PackedScene = preload("res://src/entities/items/powerup_item
 
 var boss_timer: float = 60.0 # 60-second arcade boss timer
 var _timer_tick: float = 0.0
+var _hit_flash_timer: float = 0.0
+var _hit_shake_offset: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	add_to_group("boss")
@@ -67,6 +69,11 @@ func _setup_weakpoints() -> void:
 			if enemy_bullet_pool:
 				wp.enemy_bullet_pool = enemy_bullet_pool
 			wp.destroyed.connect(_on_weakpoint_destroyed)
+			var node_name: String = wp.name
+			wp.health_changed.connect(func(curr, max_hp):
+				EventBus.boss_weakpoint_health_updated.emit(node_name, curr, max_hp)
+			)
+			EventBus.boss_weakpoint_health_updated.emit(node_name, wp.current_health, wp.max_health)
 
 func _process(delta: float) -> void:
 	_time_alive += delta
@@ -92,16 +99,34 @@ func _process(delta: float) -> void:
 				EventBus.boss_timer_updated.emit(int(boss_timer))
 				
 		BossPhase.SHIELDED_TURRETS:
-			# Vertical floating drift
-			position.y = _center_y + sin(_time_alive * 0.9) * 85.0
+			# Vertical floating drift + hit shudder
+			position.y = _center_y + sin(_time_alive * 0.9) * 85.0 + _hit_shake_offset.y
+			position.x = _target_x + _hit_shake_offset.x
 			# Shield breathing pulse
 			if shield_sprite:
 				var pulse := 1.0 + sin(_time_alive * 4.0) * 0.08
 				shield_sprite.scale = Vector2(pulse, pulse)
+			# Vibrant glowing core reactor pulse (rich magenta / cyan sci-fi reactor aura)
+			if hull_sprite:
+				if _hit_flash_timer > 0.0:
+					_hit_flash_timer -= delta
+					hull_sprite.modulate = Color(3.8, 3.2, 2.2, 1.0) # Radiant incandescent hit flash
+				else:
+					var core_glow := 1.25 + sin(_time_alive * 3.5) * 0.25
+					hull_sprite.modulate = Color(core_glow * 1.35, core_glow * 0.9, core_glow * 1.5, 1.0)
 				
 		BossPhase.ENRAGED_CORE:
-			# Aggressive vertical sweep
-			position.y = _center_y + sin(_time_alive * 1.5) * 120.0
+			# Aggressive vertical sweep + hit shudder
+			position.y = _center_y + sin(_time_alive * 1.5) * 120.0 + _hit_shake_offset.y
+			position.x = _target_x + _hit_shake_offset.x
+			# Superheated incandescent enraged core reactor glow (fiery crimson/magenta overload)
+			if hull_sprite:
+				if _hit_flash_timer > 0.0:
+					_hit_flash_timer -= delta
+					hull_sprite.modulate = Color(4.0, 3.5, 3.0, 1.0) # Searing white-hot hit flash
+				else:
+					var core_glow := 1.5 + sin(_time_alive * 6.0) * 0.4
+					hull_sprite.modulate = Color(core_glow * 2.0, core_glow * 0.6, core_glow * 1.1, 1.0)
 			
 			# Bullet hell attack loop
 			_enraged_attack_timer += delta
@@ -137,7 +162,7 @@ func _transition_to_enraged() -> void:
 	# Hull flash
 	if hull_sprite:
 		var ht := create_tween()
-		ht.tween_property(hull_sprite, "modulate", Color(2.5, 1.0, 1.0, 1.0), 0.2)
+		ht.tween_property(hull_sprite, "modulate", Color(3.5, 1.5, 2.0, 1.0), 0.2)
 		ht.tween_property(hull_sprite, "modulate", Color.WHITE, 0.3)
 
 func _execute_bullet_hell_pattern() -> void:
@@ -156,8 +181,11 @@ func _execute_bullet_hell_pattern() -> void:
 		if dir.x < 0.2:
 			enemy_bullet_pool.spawn(core_pos, dir, 460.0, 12, true, false)
 			
-	# Forward high-speed central plasma spear
-	enemy_bullet_pool.spawn(core_pos, Vector2.LEFT, 700.0, 18, true, false)
+	# Dual side front-mounted heavy weapons firing BIG plasma orbs (scale_mult = 2.8, 25 damage)
+	var top_cannon_pos := core_pos + Vector2(-60.0, -85.0)
+	var bot_cannon_pos := core_pos + Vector2(-60.0, 85.0)
+	enemy_bullet_pool.spawn(top_cannon_pos, Vector2.LEFT, 680.0, 25, true, false, 2.8)
+	enemy_bullet_pool.spawn(bot_cannon_pos, Vector2.LEFT, 680.0, 25, true, false, 2.8)
 
 func take_damage(amount: int) -> void:
 	if current_phase == BossPhase.DEFEATED:
@@ -171,10 +199,35 @@ func take_damage(amount: int) -> void:
 		_die()
 
 func _flash_core() -> void:
-	if hull_sprite:
-		var tween := create_tween()
-		hull_sprite.modulate = Color(3.0, 1.5, 1.5, 1.0)
-		tween.tween_property(hull_sprite, "modulate", Color.WHITE, 0.1)
+	_hit_flash_timer = 0.14
+	_hit_shake_offset = Vector2(randf_range(-6.0, 6.0), randf_range(-4.0, 4.0))
+	var shudder_tween := create_tween()
+	shudder_tween.tween_property(self, "_hit_shake_offset", Vector2.ZERO, 0.1)
+	
+	_spawn_core_hit_sparks()
+
+func _spawn_core_hit_sparks() -> void:
+	var parent_scene := get_parent()
+	if not parent_scene:
+		return
+		
+	var spark_count := 6
+	for i in range(spark_count):
+		var spark := Line2D.new()
+		spark.width = randf_range(2.5, 4.5)
+		spark.default_color = Color(3.5, 1.8, 2.5, 1.0) # Violet-magenta superheated plasma discharge
+		var spark_dir := Vector2.from_angle(randf_range(0, TAU))
+		var start_pt := global_position + Vector2(randf_range(-30, 30), randf_range(-30, 30))
+		var end_pt := start_pt + spark_dir * randf_range(25.0, 55.0)
+		spark.points = PackedVector2Array([start_pt, end_pt])
+		spark.top_level = true
+		parent_scene.add_child(spark)
+		
+		var spark_tween := create_tween()
+		spark_tween.set_parallel(true)
+		spark_tween.tween_property(spark, "points", PackedVector2Array([start_pt + spark_dir * 18.0, end_pt + spark_dir * 35.0]), 0.18)
+		spark_tween.tween_property(spark, "modulate:a", 0.0, 0.18)
+		spark_tween.chain().tween_callback(spark.queue_free)
 
 func _die() -> void:
 	if current_phase == BossPhase.DEFEATED:

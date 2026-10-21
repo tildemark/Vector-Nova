@@ -4,14 +4,15 @@ extends Area2D
 
 @export var max_health: int = 100
 @export var current_health: int = 100
-@export var fire_rate: float = 0.12 # Seconds per shot
+@export var fire_rate: float = 0.18 # Seconds per shot
 @export var bullet_speed: float = 1250.0
 @export var player_bullet_pool: ObjectPool
 
 # Secondary Tactical Weapon
 @export var max_secondary_energy: float = 100.0
-var current_secondary_energy: float = 100.0 # Start fully charged for immediate tactile response
-var secondary_cost: float = 25.0 # Consumes 25% energy per salvo (4 salvos per full meter)
+var current_secondary_energy: float = 0.0 # Starts at 0% and charges from energy cores / grazing
+var secondary_cost: float = 2.0 # Consumes 2% energy per salvo
+var secondary_min_threshold: float = 10.0 # Only enabled when charged to at least 10%
 var secondary_type: String = "SWARM_MISSILES"
 
 const HyperBeamScene = preload("res://src/effects/hyper_beam.tscn")
@@ -179,7 +180,7 @@ func _execute_autofire() -> void:
 	
 	match _weapon_level:
 		1:
-			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT, bullet_speed, 12, false, false)
+			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT, bullet_speed, 9, false, false)
 		2:
 			var offset_up := Vector2(0, -12)
 			var offset_down := Vector2(0, 12)
@@ -285,10 +286,10 @@ func add_secondary_energy(amount: float) -> void:
 	EventBus.secondary_energy_changed.emit(current_secondary_energy, max_secondary_energy)
 
 func fire_secondary_weapon() -> bool:
-	if current_secondary_energy < secondary_cost:
+	if current_secondary_energy < secondary_min_threshold or current_secondary_energy < secondary_cost:
 		return false
 		
-	current_secondary_energy -= secondary_cost
+	current_secondary_energy = maxf(0.0, current_secondary_energy - secondary_cost)
 	EventBus.secondary_energy_changed.emit(current_secondary_energy, max_secondary_energy)
 	EventBus.secondary_weapon_fired.emit(secondary_type)
 	

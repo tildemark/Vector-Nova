@@ -16,6 +16,7 @@ signal weapon_upgraded(tier: int)
 signal enemy_destroyed(enemy_type: String, global_pos: Vector2, scrap_value: int)
 signal boss_spawned(boss_name: String, max_hp: int)
 signal boss_health_updated(current_hp: int)
+signal boss_weakpoint_health_updated(id_name: String, current_hp: int, max_hp: int)
 signal boss_defeated()
 
 # Economy & Drops Signals

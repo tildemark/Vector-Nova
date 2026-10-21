@@ -18,7 +18,7 @@ var _homing_target: Node2D = null
 func _ready() -> void:
 	area_entered.connect(_on_area_entered)
 
-func initialize(p_direction: Vector2, p_speed: float, p_damage: int, p_pool: Node, p_is_enemy: bool = false, p_is_homing: bool = false) -> void:
+func initialize(p_direction: Vector2, p_speed: float, p_damage: int, p_pool: Node, p_is_enemy: bool = false, p_is_homing: bool = false, scale_mult: float = 1.0) -> void:
 	direction = p_direction.normalized()
 	speed = p_speed
 	damage = p_damage
@@ -28,6 +28,7 @@ func initialize(p_direction: Vector2, p_speed: float, p_damage: int, p_pool: Nod
 	_homing_target = null
 	_time_alive = 0.0
 	rotation = direction.angle()
+	scale = Vector2(scale_mult, scale_mult)
 	set_deferred("monitoring", true)
 	set_deferred("monitorable", true)
 

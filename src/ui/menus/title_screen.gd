@@ -16,6 +16,9 @@ const WarpScreenScript = preload("res://src/ui/menus/warp_screen.gd")
 # Settings Modal
 @onready var settings_modal: PanelContainer = $SettingsModal
 @onready var sfx_check: CheckBox = $SettingsModal/VBox/SFXRow/SFXCheck
+@onready var sfx_slider: HSlider = $SettingsModal/VBox/SFXVolRow/SFXSlider
+@onready var bgm_check: CheckBox = $SettingsModal/VBox/BGMRow/BGMCheck
+@onready var bgm_slider: HSlider = $SettingsModal/VBox/BGMVolRow/BGMSlider
 @onready var close_settings_btn: Button = $SettingsModal/VBox/CloseSettingsButton
 
 var _is_menu_active: bool = false
@@ -33,6 +36,8 @@ func _ready() -> void:
 		settings_btn.pressed.connect(_on_settings_pressed)
 	if close_settings_btn:
 		close_settings_btn.pressed.connect(func(): settings_modal.hide())
+		
+	_setup_settings_modal()
 		
 	# Connect GameState scrap
 	if has_node("/root/GameState"):
@@ -83,6 +88,32 @@ func _on_launch_pressed() -> void:
 
 func _on_hangar_pressed() -> void:
 	get_tree().change_scene_to_file("res://src/ui/menus/hangar.tscn")
+
+func _setup_settings_modal() -> void:
+	if not has_node("/root/GameState"):
+		return
+	if sfx_check:
+		sfx_check.button_pressed = GameState.sfx_enabled
+		sfx_check.toggled.connect(func(pressed: bool):
+			AudioManager.set_sfx_enabled(pressed)
+			if pressed:
+				AudioManager.play_sfx("laser", false)
+		)
+	if sfx_slider:
+		sfx_slider.value = GameState.sfx_volume
+		sfx_slider.value_changed.connect(func(val: float):
+			AudioManager.set_sfx_volume(val)
+		)
+	if bgm_check:
+		bgm_check.button_pressed = GameState.bgm_enabled
+		bgm_check.toggled.connect(func(pressed: bool):
+			AudioManager.set_bgm_enabled(pressed)
+		)
+	if bgm_slider:
+		bgm_slider.value = GameState.bgm_volume
+		bgm_slider.value_changed.connect(func(val: float):
+			AudioManager.set_bgm_volume(val)
+		)
 
 func _on_settings_pressed() -> void:
 	if settings_modal:

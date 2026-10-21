@@ -91,8 +91,8 @@ const ESCORT_ROSTER := {
 		"role": "RAPID ASSAULT WINGMAN",
 		"cost_scrap": 350,
 		"cost_cores": 4,
-		"fire_delay": 0.22,
-		"damage": 10,
+		"fire_delay": 0.48,
+		"damage": 3,
 		"max_shield": 3,
 		"color": Color(0.2, 0.9, 1.0),
 		"sprite_path": "res://assets/sprites/player/specter-d1-512.png",
@@ -104,8 +104,8 @@ const ESCORT_ROSTER := {
 		"role": "POINT DEFENSE SENTRY",
 		"cost_scrap": 550,
 		"cost_cores": 6,
-		"fire_delay": 0.35,
-		"damage": 12,
+		"fire_delay": 0.70,
+		"damage": 4,
 		"max_shield": 6,
 		"color": Color(0.1, 1.0, 0.6),
 		"sprite_path": "res://assets/sprites/player/aegis-s2-512.png",
@@ -117,8 +117,8 @@ const ESCORT_ROSTER := {
 		"role": "SIEGE ARTILLERY",
 		"cost_scrap": 750,
 		"cost_cores": 8,
-		"fire_delay": 0.55,
-		"damage": 30,
+		"fire_delay": 1.10,
+		"damage": 8,
 		"max_shield": 4,
 		"color": Color(1.0, 0.65, 0.1),
 		"sprite_path": "res://assets/sprites/player/goliath-b4-512.png",
@@ -130,8 +130,8 @@ const ESCORT_ROSTER := {
 		"role": "TACHYON HARVESTER",
 		"cost_scrap": 950,
 		"cost_cores": 12,
-		"fire_delay": 0.28,
-		"damage": 16,
+		"fire_delay": 0.60,
+		"damage": 4,
 		"max_shield": 5,
 		"color": Color(0.85, 0.35, 1.0),
 		"sprite_path": "res://assets/sprites/player/chronos-x-512.png",
@@ -163,6 +163,12 @@ var escort_placement_mode: String = "orbit" # "flank", "front", "orbit"
 var booster_overclock: bool = false # Start at weapon tier 2
 var booster_shield: bool = false    # Start with +40 bonus shield
 
+# Audio Settings
+var sfx_enabled: bool = true
+var bgm_enabled: bool = true
+var sfx_volume: float = 1.0 # 0.0 to 1.0
+var bgm_volume: float = 0.8 # 0.0 to 1.0
+
 # Stats & Monetization flags
 var high_score: int = 0
 var runs_played: int = 0
@@ -182,7 +188,7 @@ func get_bonus_hp() -> int:
 	return hp
 
 func get_fire_rate_delay() -> float:
-	return maxf(0.06, 0.12 - (fire_rate_level * 0.012))
+	return maxf(0.09, 0.18 - (fire_rate_level * 0.015))
 
 func get_magnet_radius() -> float:
 	return 200.0 + (magnet_level * 45.0)
@@ -403,7 +409,11 @@ func save_data() -> void:
 		"escort_slot_1": escort_slot_1,
 		"escort_slot_2": escort_slot_2,
 		"escort_placement_mode": escort_placement_mode,
-		"apex_mirror_ship_id": apex_mirror_ship_id
+		"apex_mirror_ship_id": apex_mirror_ship_id,
+		"sfx_enabled": sfx_enabled,
+		"bgm_enabled": bgm_enabled,
+		"sfx_volume": sfx_volume,
+		"bgm_volume": bgm_volume
 	}
 	SaveManager.save_game(dict)
 
@@ -420,6 +430,10 @@ func load_data() -> void:
 	runs_played = int(dict.get("runs_played", 0))
 	is_ad_free = bool(dict.get("is_ad_free", false))
 	selected_ship_id = String(dict.get("selected_ship_id", "vanguard"))
+	sfx_enabled = bool(dict.get("sfx_enabled", true))
+	bgm_enabled = bool(dict.get("bgm_enabled", true))
+	sfx_volume = float(dict.get("sfx_volume", 1.0))
+	bgm_volume = float(dict.get("bgm_volume", 0.8))
 	var loaded_ships = dict.get("unlocked_ships", ["vanguard"])
 	if loaded_ships is Array:
 		unlocked_ships.clear()

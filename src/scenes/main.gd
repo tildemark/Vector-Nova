@@ -15,6 +15,13 @@ extends Node2D
 @onready var wave_banner: Label = $UI/HUD/WaveBanner
 @onready var touch_hint: Label = $UI/HUD/CenterHint
 @onready var hangar_btn: Button = $UI/HUD/TopBar/HangarButton
+@onready var settings_btn: Button = $UI/HUD/TopBar/SettingsButton
+@onready var settings_modal: PanelContainer = $UI/HUD/SettingsModal
+@onready var sfx_check: CheckBox = $UI/HUD/SettingsModal/VBox/SFXRow/SFXCheck
+@onready var sfx_slider: HSlider = $UI/HUD/SettingsModal/VBox/SFXVolRow/SFXSlider
+@onready var bgm_check: CheckBox = $UI/HUD/SettingsModal/VBox/BGMRow/BGMCheck
+@onready var bgm_slider: HSlider = $UI/HUD/SettingsModal/VBox/BGMVolRow/BGMSlider
+@onready var close_settings_btn: Button = $UI/HUD/SettingsModal/VBox/CloseSettingsButton
 
 # EMP Special Button references
 @onready var emp_button: Button = $UI/HUD/EMPContainer/EMPButton
@@ -31,6 +38,10 @@ extends Node2D
 @onready var boss_name_label: Label = $UI/HUD/BossContainer/BossNameLabel
 @onready var boss_hp_bar: ProgressBar = $UI/HUD/BossContainer/BossHPBar
 @onready var boss_timer_label: Label = $UI/HUD/BossContainer/BossTimerLabel
+@onready var top_wing_hp_bar: ProgressBar = $UI/HUD/BossContainer/WeakpointBarsRow/TopWingBox/TopWingHPBar
+@onready var top_turret_hp_bar: ProgressBar = $UI/HUD/BossContainer/WeakpointBarsRow/TurretTopBox/TopTurretHPBar
+@onready var bottom_turret_hp_bar: ProgressBar = $UI/HUD/BossContainer/WeakpointBarsRow/TurretBotBox/BottomTurretHPBar
+@onready var bottom_wing_hp_bar: ProgressBar = $UI/HUD/BossContainer/WeakpointBarsRow/BottomWingBox/BottomWingHPBar
 @onready var score_label: Label = $UI/HUD/TopBar/ScoreContainer/ScoreLabel
 
 var _total_scrap: int = 0
@@ -47,7 +58,7 @@ var _emp_charge: float = 50.0 # 0.0 to 100.0
 var _emp_ready: bool = false
 var _emp_pulse_tween: Tween = null
 
-var _sec_energy: float = 100.0
+var _sec_energy: float = 0.0
 var _sec_max_energy: float = 100.0
 
 func _ready() -> void:
@@ -79,6 +90,14 @@ func _ready() -> void:
 			get_tree().change_scene_to_file("res://src/ui/menus/hangar.tscn")
 		)
 		
+	if settings_btn:
+		settings_btn.pressed.connect(_on_settings_button_pressed)
+		
+	if close_settings_btn:
+		close_settings_btn.pressed.connect(_on_close_settings_pressed)
+		
+	_setup_settings_modal()
+		
 	# Connect to EventBus signals
 	EventBus.player_damaged.connect(_on_player_damaged)
 	EventBus.player_died.connect(_on_player_died)
@@ -91,6 +110,7 @@ func _ready() -> void:
 	EventBus.secondary_weapon_fired.connect(_on_secondary_weapon_fired)
 	EventBus.boss_spawned.connect(_on_boss_spawned)
 	EventBus.boss_health_updated.connect(_on_boss_health_updated)
+	EventBus.boss_weakpoint_health_updated.connect(_on_boss_weakpoint_health_updated)
 	EventBus.boss_defeated.connect(_on_boss_defeated)
 	EventBus.hit_stop_triggered.connect(_on_hit_stop)
 	EventBus.bullet_cancel_triggered.connect(_on_bullet_cancel)
@@ -180,7 +200,7 @@ func _update_sec_ui() -> void:
 	if sec_status_label:
 		sec_status_label.text = "SEC: %d%%" % int((_sec_energy / maxf(1.0, _sec_max_energy)) * 100.0)
 	if sec_button:
-		var can_fire := _sec_energy >= 25.0
+		var can_fire := _sec_energy >= 10.0
 		sec_button.modulate = Color(1.2, 1.2, 1.2, 1.0) if can_fire else Color(0.6, 0.6, 0.6, 0.6)
 
 func _on_secondary_weapon_fired(weapon_type: String) -> void:
@@ -448,6 +468,25 @@ func _on_boss_health_updated(current_hp: int) -> void:
 	if boss_hp_bar:
 		boss_hp_bar.value = current_hp
 
+func _on_boss_weakpoint_health_updated(id_name: String, current_hp: int, max_hp: int) -> void:
+	match id_name:
+		"TopWing":
+			if top_wing_hp_bar:
+				top_wing_hp_bar.max_value = max_hp
+				top_wing_hp_bar.value = current_hp
+		"BottomWing":
+			if bottom_wing_hp_bar:
+				bottom_wing_hp_bar.max_value = max_hp
+				bottom_wing_hp_bar.value = current_hp
+		"TopTurret":
+			if top_turret_hp_bar:
+				top_turret_hp_bar.max_value = max_hp
+				top_turret_hp_bar.value = current_hp
+		"BottomTurret":
+			if bottom_turret_hp_bar:
+				bottom_turret_hp_bar.max_value = max_hp
+				bottom_turret_hp_bar.value = current_hp
+
 func _on_boss_defeated() -> void:
 	shake_camera(20.0, 1.2)
 	_add_score(8000)
@@ -475,3 +514,39 @@ func _on_boss_defeated() -> void:
 			await get_tree().create_timer(2.5).timeout
 			get_tree().change_scene_to_file("res://src/ui/menus/hangar.tscn")
 		)
+
+func _setup_settings_modal() -> void:
+	if not has_node("/root/GameState"):
+		return
+	if sfx_check:
+		sfx_check.button_pressed = GameState.sfx_enabled
+		sfx_check.toggled.connect(func(pressed: bool):
+			AudioManager.set_sfx_enabled(pressed)
+			if pressed:
+				AudioManager.play_sfx("laser", false)
+		)
+	if sfx_slider:
+		sfx_slider.value = GameState.sfx_volume
+		sfx_slider.value_changed.connect(func(val: float):
+			AudioManager.set_sfx_volume(val)
+		)
+	if bgm_check:
+		bgm_check.button_pressed = GameState.bgm_enabled
+		bgm_check.toggled.connect(func(pressed: bool):
+			AudioManager.set_bgm_enabled(pressed)
+		)
+	if bgm_slider:
+		bgm_slider.value = GameState.bgm_volume
+		bgm_slider.value_changed.connect(func(val: float):
+			AudioManager.set_bgm_volume(val)
+		)
+
+func _on_settings_button_pressed() -> void:
+	if settings_modal:
+		get_tree().paused = true
+		settings_modal.show()
+
+func _on_close_settings_pressed() -> void:
+	if settings_modal:
+		settings_modal.hide()
+		get_tree().paused = false

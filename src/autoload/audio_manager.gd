@@ -27,8 +27,21 @@ const BGM_PATHS := {
 	"stage1": "res://assets/audio/bgm/bgm_stage1.wav"
 }
 
+var sfx_enabled: bool = true
+var bgm_enabled: bool = true
+var sfx_volume: float = 1.0 # 0.0 to 1.0
+var bgm_volume: float = 0.8 # 0.0 to 1.0
+var _current_bgm_key: String = ""
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	# Load initial settings from GameState if present
+	if has_node("/root/GameState"):
+		sfx_enabled = GameState.sfx_enabled
+		bgm_enabled = GameState.bgm_enabled
+		sfx_volume = GameState.sfx_volume
+		bgm_volume = GameState.bgm_volume
 	
 	# Create BGM audio player
 	_bgm_player = AudioStreamPlayer.new()
@@ -56,7 +69,45 @@ func _preload_audio() -> void:
 		if ResourceLoader.exists(path):
 			_sound_cache[bgm_name] = load(path)
 
+func set_sfx_enabled(enabled: bool) -> void:
+	sfx_enabled = enabled
+	if has_node("/root/GameState"):
+		GameState.sfx_enabled = enabled
+		GameState.save_data()
+	if not enabled:
+		for p in _sfx_players:
+			if p.playing:
+				p.stop()
+
+func set_bgm_enabled(enabled: bool) -> void:
+	bgm_enabled = enabled
+	if has_node("/root/GameState"):
+		GameState.bgm_enabled = enabled
+		GameState.save_data()
+	if not enabled:
+		if _bgm_player and _bgm_player.playing:
+			_bgm_player.stop()
+	else:
+		if not _current_bgm_key.is_empty():
+			play_bgm(_current_bgm_key)
+
+func set_sfx_volume(val: float) -> void:
+	sfx_volume = clampf(val, 0.0, 1.0)
+	if has_node("/root/GameState"):
+		GameState.sfx_volume = sfx_volume
+		GameState.save_data()
+
+func set_bgm_volume(val: float) -> void:
+	bgm_volume = clampf(val, 0.0, 1.0)
+	if has_node("/root/GameState"):
+		GameState.bgm_volume = bgm_volume
+		GameState.save_data()
+	if _bgm_player:
+		_bgm_player.volume_db = linear_to_db(maxf(bgm_volume, 0.0001)) - 4.0
+
 func play_sfx(sfx_key: String, randomize_pitch: bool = true) -> void:
+	if not sfx_enabled or sfx_volume <= 0.001:
+		return
 	if not _sound_cache.has(sfx_key):
 		return
 	var stream: AudioStream = _sound_cache[sfx_key]
@@ -73,18 +124,20 @@ func play_sfx(sfx_key: String, randomize_pitch: bool = true) -> void:
 		player = _sfx_players[0]
 		
 	player.stream = stream
+	player.volume_db = linear_to_db(maxf(sfx_volume, 0.0001))
 	player.pitch_scale = randf_range(0.92, 1.08) if randomize_pitch else 1.0
 	player.play()
 
-func play_bgm(bgm_key: String, volume_db: float = -4.0) -> void:
-	if not _sound_cache.has(bgm_key) or not _bgm_player:
+func play_bgm(bgm_key: String, base_volume_db: float = -4.0) -> void:
+	_current_bgm_key = bgm_key
+	if not bgm_enabled or bgm_volume <= 0.001 or not _sound_cache.has(bgm_key) or not _bgm_player:
 		return
 	var stream: AudioStream = _sound_cache[bgm_key]
 	if _bgm_player.stream == stream and _bgm_player.playing:
 		return
 		
 	_bgm_player.stream = stream
-	_bgm_player.volume_db = volume_db
+	_bgm_player.volume_db = linear_to_db(maxf(bgm_volume, 0.0001)) + base_volume_db
 	_bgm_player.play()
 
 func stop_bgm() -> void:
