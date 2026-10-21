@@ -141,21 +141,13 @@ func _spawn_wave_3() -> void:
 	elite.global_position = Vector2(x + 80, 360)
 	elite.enemy_bullet_pool = enemy_bullet_pool
 	
-	# Mid-Boss Heavy Elite Cruiser: sole powerup source in Stage 1
-	# 1 guaranteed powerup, plus a low 15% chance to drop a 2nd
+	# Mid-Boss Heavy Elite Cruiser: sole powerup source in Stage 1 (strictly 1 guaranteed drop, no extra drops)
 	elite.defeated.connect(func(e: BaseEnemy):
 		if powerup_scene and _stage_powerups_spawned < 1:
 			_stage_powerups_spawned += 1
 			var p := powerup_scene.instantiate() as Node2D
 			p.global_position = e.global_position
 			get_parent().call_deferred("add_child", p)
-			
-			# Low 15% chance for a 2nd drop
-			if randf() <= 0.15:
-				_stage_powerups_spawned += 1
-				var p2 := powerup_scene.instantiate() as Node2D
-				p2.global_position = e.global_position + Vector2(25, -20)
-				get_parent().call_deferred("add_child", p2)
 	)
 	
 	get_parent().add_child(elite)
