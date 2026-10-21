@@ -240,6 +240,9 @@
     let width = 0;
     let height = 0;
 
+    const vanguardImg = new Image();
+    vanguardImg.src = 'assets/sprites/player/vanguard-01-512.png';
+
     function resize() {
       const rect = canvas.getBoundingClientRect();
       width = canvas.width = rect.width;
@@ -361,28 +364,38 @@
       ctx.translate(shipX, shipY);
       ctx.rotate(bankAngle);
 
-      // Ship triangle body
+      // Plasma thruster flame
       ctx.beginPath();
-      ctx.moveTo(18, 0);
-      ctx.lineTo(-14, -10);
-      ctx.lineTo(-8, 0);
-      ctx.lineTo(-14, 10);
+      ctx.moveTo(-12, 0);
+      ctx.lineTo(-24, -5);
+      ctx.lineTo(-32 - Math.random() * 8, 0);
+      ctx.lineTo(-24, 5);
       ctx.closePath();
       ctx.fillStyle = '#00f7ff';
       ctx.shadowColor = '#00f7ff';
-      ctx.shadowBlur = 12;
+      ctx.shadowBlur = 15;
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // Plasma thruster flame
-      ctx.beginPath();
-      ctx.moveTo(-10, 0);
-      ctx.lineTo(-22, -4);
-      ctx.lineTo(-28 - Math.random() * 6, 0);
-      ctx.lineTo(-22, 4);
-      ctx.closePath();
-      ctx.fillStyle = '#38bdf8';
-      ctx.fill();
+      if (vanguardImg.complete && vanguardImg.naturalWidth > 0) {
+        // Draw Vanguard-01 sprite scaled cleanly (pointing right)
+        const shipW = 48;
+        const shipH = 48;
+        ctx.drawImage(vanguardImg, -shipW / 2, -shipH / 2, shipW, shipH);
+      } else {
+        // High-tech vector fallback
+        ctx.beginPath();
+        ctx.moveTo(20, 0);
+        ctx.lineTo(-15, -12);
+        ctx.lineTo(-8, 0);
+        ctx.lineTo(-15, 12);
+        ctx.closePath();
+        ctx.fillStyle = '#00f7ff';
+        ctx.shadowColor = '#00f7ff';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
 
       ctx.restore();
 
@@ -440,6 +453,11 @@
     const tierBtns = document.querySelectorAll('.tier-card');
     const tierLabel = document.getElementById('range-tier-label');
     const empBtn = document.getElementById('btn-trigger-emp');
+
+    const vanguardImg = new Image();
+    vanguardImg.src = 'assets/sprites/player/vanguard-01-512.png';
+    const scoutImg = new Image();
+    scoutImg.src = 'assets/sprites/enemies/scout-512.png';
 
     let currentTier = 1;
     let width = 0;
@@ -597,23 +615,43 @@
       }
       if (fireCooldown > 0) fireCooldown--;
 
-      // Render Player Ship in Range
+      // Render Player Ship in Range (Vanguard-01)
       const shipX = 40;
       const shipY = height / 2;
 
       ctx.save();
       ctx.translate(shipX, shipY);
+
+      // Thruster flame
       ctx.beginPath();
-      ctx.moveTo(20, 0);
-      ctx.lineTo(-15, -12);
-      ctx.lineTo(-6, 0);
-      ctx.lineTo(-15, 12);
+      ctx.moveTo(-16, 0);
+      ctx.lineTo(-28, -6);
+      ctx.lineTo(-36 - Math.random() * 8, 0);
+      ctx.lineTo(-28, 6);
       ctx.closePath();
       ctx.fillStyle = '#00f7ff';
       ctx.shadowColor = '#00f7ff';
       ctx.shadowBlur = 14;
       ctx.fill();
       ctx.shadowBlur = 0;
+
+      if (vanguardImg.complete && vanguardImg.naturalWidth > 0) {
+        const shipW = 52;
+        const shipH = 52;
+        ctx.drawImage(vanguardImg, -shipW / 2, -shipH / 2, shipW, shipH);
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(20, 0);
+        ctx.lineTo(-15, -12);
+        ctx.lineTo(-6, 0);
+        ctx.lineTo(-15, 12);
+        ctx.closePath();
+        ctx.fillStyle = '#00f7ff';
+        ctx.shadowColor = '#00f7ff';
+        ctx.shadowBlur = 14;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
       ctx.restore();
 
       // Render & Update Bullets
@@ -693,29 +731,50 @@
         }
       }
 
-      // Render & Update Drones
+      // Render & Update Enemy Scout Ships
       for (let i = drones.length - 1; i >= 0; i--) {
         const d = drones[i];
         d.x -= d.speed;
 
         ctx.save();
         ctx.translate(d.x, d.y);
-        ctx.beginPath();
-        ctx.arc(0, 0, d.radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#1e293b';
-        ctx.strokeStyle = '#ff2a5f';
-        ctx.lineWidth = 2;
-        ctx.fill();
-        ctx.stroke();
 
-        // Eye core
-        ctx.beginPath();
-        ctx.arc(0, 0, 5, 0, Math.PI * 2);
-        ctx.fillStyle = '#ff2a5f';
-        ctx.fill();
+        if (scoutImg.complete && scoutImg.naturalWidth > 0) {
+          // Flip horizontally so the Scout ship faces left (toward player)
+          ctx.save();
+          ctx.scale(-1, 1);
+          const scoutW = 44;
+          const scoutH = 44;
+          ctx.drawImage(scoutImg, -scoutW / 2, -scoutH / 2, scoutW, scoutH);
+          ctx.restore();
+        } else {
+          // Sleek vector Scout fallback
+          ctx.beginPath();
+          ctx.moveTo(-16, 0);
+          ctx.lineTo(12, -10);
+          ctx.lineTo(6, 0);
+          ctx.lineTo(12, 10);
+          ctx.closePath();
+          ctx.fillStyle = '#ff2a5f';
+          ctx.shadowColor = '#ff2a5f';
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        // Mini HP Bar above Scout ship
+        if (d.hp < d.maxHp) {
+          const barW = 24;
+          const hpRatio = d.hp / d.maxHp;
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+          ctx.fillRect(-barW / 2, -22, barW, 3);
+          ctx.fillStyle = '#ff2a5f';
+          ctx.fillRect(-barW / 2, -22, barW * hpRatio, 3);
+        }
+
         ctx.restore();
 
-        if (d.x < -30) drones.splice(i, 1);
+        if (d.x < -40) drones.splice(i, 1);
       }
 
       // Render Particles
