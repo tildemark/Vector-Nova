@@ -14,21 +14,25 @@ var current_secondary_energy: float = 0.0 # Starts at 0% and charges from energy
 var secondary_cost: float = 2.0 # Consumes 2% energy per salvo
 var secondary_min_threshold: float = 10.0 # Only enabled when charged to at least 10%
 var secondary_type: String = "SWARM_MISSILES"
+var primary_weapon_type: String = "laser"
 
 const HyperBeamScene = preload("res://src/effects/hyper_beam.tscn")
 const PulseMortarScene = preload("res://src/effects/pulse_mortar.tscn")
 const KineticBarrierScene = preload("res://src/effects/kinetic_barrier.tscn")
 const GravVortexScene = preload("res://src/effects/grav_vortex.tscn")
+const HITBOX_CORE_TEX = preload("res://assets/sprites/projectiles/player_hitbox_core.png")
 
 @onready var muzzle_point: Marker2D = $MuzzlePoint
 @onready var ship_sprite: Sprite2D = $ShipSprite
 @onready var thruster_sprite: Sprite2D = $ThrusterSprite
+@onready var hitbox_core_sprite: Sprite2D = get_node_or_null("HitboxCoreSprite")
 
 var _fire_timer: float = 0.0
 var _active_touch_index: int = -1
 var _weapon_level: int = 1
 var _thruster_time: float = 0.0
 var _target_tilt: float = 0.0
+var _core_pulse_time: float = 0.0
 
 # Double-Tap detection variables
 var _last_tap_time: int = 0
@@ -39,6 +43,11 @@ const DOUBLE_TAP_MAX_DISTANCE: float = 90.0
 func _ready() -> void:
 	add_to_group("player")
 	
+	if hitbox_core_sprite:
+		hitbox_core_sprite.texture = HITBOX_CORE_TEX
+		hitbox_core_sprite.scale = Vector2(0.065, 0.065)
+		hitbox_core_sprite.modulate = Color(1.5, 1.8, 2.5, 0.95)
+	
 	# Apply GameState permanent upgrades & boosters
 	if has_node("/root/GameState"):
 		var ship_info: Dictionary = GameState.get_selected_ship()
@@ -48,6 +57,19 @@ func _ready() -> void:
 		fire_rate = GameState.get_fire_rate_delay()
 		_weapon_level = GameState.get_starting_weapon_level()
 		secondary_type = str(ship_info.get("secondary_type", "SWARM_MISSILES"))
+		
+		# Configure primary projectile type based on ship
+		var raw_p_type := str(ship_info.get("primary_type", "TWIN_PLASMA")).to_upper()
+		if "BEAM" in raw_p_type:
+			primary_weapon_type = "laser"
+		elif "FLAK" in raw_p_type:
+			primary_weapon_type = "quad_flak"
+		elif "HELIX" in raw_p_type:
+			primary_weapon_type = "helix"
+		elif "PLASMA" in raw_p_type:
+			primary_weapon_type = "plasma"
+		else:
+			primary_weapon_type = "laser"
 		
 		# Load ship custom vector sprite
 		var sprite_path: String = str(ship_info.get("sprite_path", ""))
@@ -145,19 +167,19 @@ func _process(delta: float) -> void:
 	if thruster_sprite:
 		var scale_pulse := 1.0 + sin(_thruster_time) * 0.15
 		thruster_sprite.scale = Vector2(scale_pulse, 1.0 + cos(_thruster_time * 1.5) * 0.1)
+		
+	# Hitbox core rotation & subtle breathing pulse
+	_core_pulse_time += delta * 4.0
+	if hitbox_core_sprite:
+		hitbox_core_sprite.rotation += delta * 1.5
+		var core_scale := 0.065 + sin(_core_pulse_time) * 0.008
+		hitbox_core_sprite.scale = Vector2(core_scale, core_scale)
 	
 	# Auto-fire loop
 	_fire_timer += delta
 	if _fire_timer >= fire_rate:
 		_fire_timer = 0.0
 		_execute_autofire()
-		
-	queue_redraw()
-
-func _draw() -> void:
-	# Arcade precision dodging hitbox indicator dot
-	draw_circle(Vector2.ZERO, 6.0, Color(0.0, 0.95, 1.0, 0.45))
-	draw_circle(Vector2.ZERO, 2.5, Color.WHITE)
 
 func _on_graze_area_entered(other: Area2D) -> void:
 	if other.has_method("recycle") and other.get("is_enemy_bullet") == true:
@@ -177,28 +199,29 @@ func _execute_autofire() -> void:
 		
 	AudioManager.play_sfx("laser", true)
 	var spawn_pos: Vector2 = muzzle_point.global_position if muzzle_point else global_position
+	var ptype := primary_weapon_type
 	
 	match _weapon_level:
 		1:
-			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT, bullet_speed, 9, false, false)
+			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT, bullet_speed, 9, false, false, 1.0, ptype)
 		2:
 			var offset_up := Vector2(0, -12)
 			var offset_down := Vector2(0, 12)
-			player_bullet_pool.spawn(spawn_pos + offset_up, Vector2.RIGHT, bullet_speed, 12, false, false)
-			player_bullet_pool.spawn(spawn_pos + offset_down, Vector2.RIGHT, bullet_speed, 12, false, false)
+			player_bullet_pool.spawn(spawn_pos + offset_up, Vector2.RIGHT, bullet_speed, 12, false, false, 1.0, ptype)
+			player_bullet_pool.spawn(spawn_pos + offset_down, Vector2.RIGHT, bullet_speed, 12, false, false, 1.0, ptype)
 		3:
-			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT, bullet_speed, 14, false, false)
-			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT.rotated(deg_to_rad(12)), bullet_speed, 12, false, false)
-			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT.rotated(deg_to_rad(-12)), bullet_speed, 12, false, false)
+			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT, bullet_speed, 14, false, false, 1.0, ptype)
+			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT.rotated(deg_to_rad(12)), bullet_speed, 12, false, false, 1.0, ptype)
+			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT.rotated(deg_to_rad(-12)), bullet_speed, 12, false, false, 1.0, ptype)
 		_:
 			# Level 4: Overcharged spread + 2 homing micro-missiles!
-			player_bullet_pool.spawn(spawn_pos + Vector2(0, -8), Vector2.RIGHT, bullet_speed, 15, false, false)
-			player_bullet_pool.spawn(spawn_pos + Vector2(0, 8), Vector2.RIGHT, bullet_speed, 15, false, false)
-			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT.rotated(deg_to_rad(14)), bullet_speed, 14, false, false)
-			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT.rotated(deg_to_rad(-14)), bullet_speed, 14, false, false)
+			player_bullet_pool.spawn(spawn_pos + Vector2(0, -8), Vector2.RIGHT, bullet_speed, 15, false, false, 1.0, ptype)
+			player_bullet_pool.spawn(spawn_pos + Vector2(0, 8), Vector2.RIGHT, bullet_speed, 15, false, false, 1.0, ptype)
+			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT.rotated(deg_to_rad(14)), bullet_speed, 14, false, false, 1.0, ptype)
+			player_bullet_pool.spawn(spawn_pos, Vector2.RIGHT.rotated(deg_to_rad(-14)), bullet_speed, 14, false, false, 1.0, ptype)
 			# Homing micro-missiles curving toward enemies
-			player_bullet_pool.spawn(spawn_pos + Vector2(-10, -20), Vector2.RIGHT.rotated(deg_to_rad(28)), bullet_speed * 0.75, 25, false, true)
-			player_bullet_pool.spawn(spawn_pos + Vector2(-10, 20), Vector2.RIGHT.rotated(deg_to_rad(-28)), bullet_speed * 0.75, 25, false, true)
+			player_bullet_pool.spawn(spawn_pos + Vector2(-10, -20), Vector2.RIGHT.rotated(deg_to_rad(28)), bullet_speed * 0.75, 25, false, true, 1.0, "missile")
+			player_bullet_pool.spawn(spawn_pos + Vector2(-10, 20), Vector2.RIGHT.rotated(deg_to_rad(-28)), bullet_speed * 0.75, 25, false, true, 1.0, "missile")
 
 var _emp_shockwave_scene: PackedScene = preload("res://src/effects/emp_shockwave.tscn")
 
@@ -319,7 +342,7 @@ func _fire_swarm_missiles() -> void:
 		var angle_deg: float = angles[i]
 		var dir := Vector2.RIGHT.rotated(deg_to_rad(angle_deg))
 		var offset := Vector2(-8, angle_deg * 0.4)
-		player_bullet_pool.spawn(spawn_pos + offset, dir, bullet_speed * 0.85, 28, false, true)
+		player_bullet_pool.spawn(spawn_pos + offset, dir, bullet_speed * 0.85, 28, false, true, 1.0, "missile")
 		
 	_flash_muzzle_secondary()
 

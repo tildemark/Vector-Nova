@@ -86,18 +86,18 @@ func _fire() -> void:
 		
 	if weakpoint_type == WeakpointType.TURRET:
 		var dir := Vector2.from_angle(rotation)
-		# Dual heavy plasma cannon barrels firing BIG plasma orbs (scale_mult = 2.4, high damage)
+		# Dual heavy plasma cannon barrels firing BIG plasma orbs (scale_mult = 1.4, high damage)
 		var perp := Vector2(-dir.y, dir.x)
 		var spawn_pos := global_position + dir * 65.0
-		enemy_bullet_pool.spawn(spawn_pos + perp * 16.0, dir, 520.0, 20, true, false, 2.4)
-		enemy_bullet_pool.spawn(spawn_pos - perp * 16.0, dir, 520.0, 20, true, false, 2.4)
+		enemy_bullet_pool.spawn(spawn_pos + perp * 16.0, dir, 520.0, 20, true, false, 1.4, "enemy_heavy")
+		enemy_bullet_pool.spawn(spawn_pos - perp * 16.0, dir, 520.0, 20, true, false, 1.4, "enemy_heavy")
 	else:
 		# Wing missile/flak battery: fires a broad 3-projectile salvo forward to the left
 		var forward_dir := Vector2.LEFT
 		var spawn_pos := global_position + forward_dir * 30.0
-		enemy_bullet_pool.spawn(spawn_pos, forward_dir, 460.0, 14, true, false, 1.4)
-		enemy_bullet_pool.spawn(spawn_pos + Vector2(0, -18), forward_dir.rotated(0.18), 440.0, 14, true, false, 1.4)
-		enemy_bullet_pool.spawn(spawn_pos + Vector2(0, 18), forward_dir.rotated(-0.18), 440.0, 14, true, false, 1.4)
+		enemy_bullet_pool.spawn(spawn_pos, forward_dir, 460.0, 14, true, false, 1.1, "enemy_pellet")
+		enemy_bullet_pool.spawn(spawn_pos + Vector2(0, -18), forward_dir.rotated(0.18), 440.0, 14, true, false, 1.1, "enemy_pellet")
+		enemy_bullet_pool.spawn(spawn_pos + Vector2(0, 18), forward_dir.rotated(-0.18), 440.0, 14, true, false, 1.1, "enemy_pellet")
 
 func take_damage(amount: int) -> void:
 	if is_destroyed:
@@ -168,6 +168,11 @@ func _destroy() -> void:
 	# Trigger Varth-style bullet cancel and Hit-Stop crunch
 	EventBus.bullet_cancel_triggered.emit()
 	EventBus.hit_stop_triggered.emit(35.0)
+	
+	# Spawn big destruction explosion
+	var main_scene := get_tree().current_scene
+	if main_scene:
+		ExplosionEffect.create(main_scene, global_position, ExplosionEffect.ExplosionSize.BIG)
 	
 	# Drop burst of scrap
 	for i in range(4):

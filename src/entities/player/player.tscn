@@ -23,6 +23,9 @@ texture = ExtResource("3_flame")
 [node name="ShipSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_ship")
 
+[node name="HitboxCoreSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.065, 0.065)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5707963
 shape = SubResource("CapsuleShape2D_p")

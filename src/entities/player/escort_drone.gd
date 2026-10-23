@@ -113,18 +113,18 @@ func _execute_escort_attack() -> void:
 	match escort_id:
 		"specter":
 			# High-speed twin darts
-			player_bullet_pool.spawn(global_position + Vector2(8, -6), Vector2.RIGHT, 750.0, projectile_damage, false, false)
-			player_bullet_pool.spawn(global_position + Vector2(8, 6), Vector2.RIGHT, 750.0, projectile_damage, false, false)
+			player_bullet_pool.spawn(global_position + Vector2(8, -6), Vector2.RIGHT, 750.0, projectile_damage, false, false, 0.9, "laser")
+			player_bullet_pool.spawn(global_position + Vector2(8, 6), Vector2.RIGHT, 750.0, projectile_damage, false, false, 0.9, "laser")
 		"aegis_drone":
 			# Piercing focused laser dart
-			player_bullet_pool.spawn(global_position + Vector2(10, 0), Vector2.RIGHT, 820.0, projectile_damage, false, false)
+			player_bullet_pool.spawn(global_position + Vector2(10, 0), Vector2.RIGHT, 820.0, projectile_damage, false, false, 0.9, "helix")
 		"goliath":
 			# Micro-torpedo with heavy impact
-			player_bullet_pool.spawn(global_position + Vector2(12, 0), Vector2.RIGHT, 540.0, projectile_damage, false, true)
+			player_bullet_pool.spawn(global_position + Vector2(12, 0), Vector2.RIGHT, 540.0, projectile_damage, false, true, 1.1, "missile")
 		"chronos_pod":
 			# Dual stasis vulcan
-			player_bullet_pool.spawn(global_position + Vector2(8, -4), Vector2.RIGHT, 700.0, projectile_damage, false, false)
-			player_bullet_pool.spawn(global_position + Vector2(8, 4), Vector2.RIGHT, 700.0, projectile_damage, false, false)
+			player_bullet_pool.spawn(global_position + Vector2(8, -4), Vector2.RIGHT, 700.0, projectile_damage, false, false, 0.9, "plasma")
+			player_bullet_pool.spawn(global_position + Vector2(8, 4), Vector2.RIGHT, 700.0, projectile_damage, false, false, 0.9, "plasma")
 
 func _vacuum_nearby_scrap(delta: float) -> void:
 	var items := get_tree().get_nodes_in_group("items")

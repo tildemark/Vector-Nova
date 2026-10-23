@@ -57,5 +57,5 @@ func _fire_dual_plasma() -> void:
 		if dir.x > -0.3:
 			dir = Vector2.LEFT
 	
-	enemy_bullet_pool.spawn(global_position + offset_top, dir, 520.0, 15, true)
-	enemy_bullet_pool.spawn(global_position + offset_bot, dir, 520.0, 15, true)
+	enemy_bullet_pool.spawn(global_position + offset_top, dir, 520.0, 15, true, false, 1.0, "enemy_lance")
+	enemy_bullet_pool.spawn(global_position + offset_bot, dir, 520.0, 15, true, false, 1.0, "enemy_lance")

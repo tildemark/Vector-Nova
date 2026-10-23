@@ -7,15 +7,24 @@ extends Area2D
 @export var vortex_radius: float = 160.0
 @export var tick_damage: int = 42
 
+const VORTEX_TEX = preload("res://assets/sprites/projectiles/grav_vortex.png")
+
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 var _time_alive: float = 0.0
 var _tick_timer: float = 0.0
 var _rotation_angle: float = 0.0
+var _vortex_sprite: Sprite2D = null
 
 func _ready() -> void:
 	add_to_group("player_weapons")
 	monitoring = true
+	
+	_vortex_sprite = Sprite2D.new()
+	_vortex_sprite.texture = VORTEX_TEX
+	_vortex_sprite.scale = Vector2(0.65, 0.65)
+	_vortex_sprite.modulate = Color(1.5, 1.2, 2.0, 0.9)
+	add_child(_vortex_sprite)
 	
 	scale = Vector2(0.1, 0.1)
 	var tween := create_tween()
@@ -25,6 +34,8 @@ func _process(delta: float) -> void:
 	_time_alive += delta
 	_tick_timer += delta
 	_rotation_angle += delta * 6.0
+	if _vortex_sprite:
+		_vortex_sprite.rotation = _rotation_angle
 	
 	# Drift forward
 	global_position.x += travel_speed * delta

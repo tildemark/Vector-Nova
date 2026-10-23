@@ -48,16 +48,16 @@ func _execute_attack() -> void:
 	var aim_dir := (target_pos - global_position).normalized()
 	
 	if _attack_step % 2 == 0:
-		# 3-way aimed fan shot
-		enemy_bullet_pool.spawn(global_position, aim_dir, 460.0, 15, true, false)
-		enemy_bullet_pool.spawn(global_position, aim_dir.rotated(deg_to_rad(18)), 460.0, 15, true, false)
-		enemy_bullet_pool.spawn(global_position, aim_dir.rotated(deg_to_rad(-18)), 460.0, 15, true, false)
+		# 3-way aimed fan shot with high-density plasma pellets
+		enemy_bullet_pool.spawn(global_position, aim_dir, 460.0, 15, true, false, 1.1, "enemy_pellet")
+		enemy_bullet_pool.spawn(global_position, aim_dir.rotated(deg_to_rad(18)), 460.0, 15, true, false, 1.1, "enemy_pellet")
+		enemy_bullet_pool.spawn(global_position, aim_dir.rotated(deg_to_rad(-18)), 460.0, 15, true, false, 1.1, "enemy_pellet")
 	else:
-		# Radial 8-bullet ring
+		# Radial 8-bullet ring of glowing orbs
 		for i in range(8):
 			var angle := (PI * 2.0 / 8.0) * i + (_time_alive * 1.5)
 			var dir := Vector2.from_angle(angle)
-			enemy_bullet_pool.spawn(global_position, dir, 380.0, 12, true, false)
+			enemy_bullet_pool.spawn(global_position, dir, 380.0, 12, true, false, 1.0, "enemy_orb")
 			
 	_attack_step += 1
 

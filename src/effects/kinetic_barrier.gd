@@ -5,16 +5,26 @@ extends Area2D
 @export var duration: float = 4.0
 @export var ram_damage: int = 140
 
+const BARRIER_TEX = preload("res://assets/sprites/projectiles/kinetic_barrier.png")
+
 @onready var shield_arc: Line2D = $ShieldArc
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 var _time_alive: float = 0.0
 var _parent_ship: Node2D = null
 var _pulse_phase: float = 0.0
+var _barrier_sprite: Sprite2D = null
 
 func _ready() -> void:
 	add_to_group("player_weapons")
 	area_entered.connect(_on_area_entered)
+	
+	_barrier_sprite = Sprite2D.new()
+	_barrier_sprite.texture = BARRIER_TEX
+	_barrier_sprite.position = Vector2(24, 0)
+	_barrier_sprite.scale = Vector2(0.28, 0.28)
+	_barrier_sprite.modulate = Color(1.2, 2.2, 1.8, 0.85)
+	add_child(_barrier_sprite)
 	
 	# Entrance scale up
 	scale = Vector2(0.1, 0.1)
@@ -37,6 +47,9 @@ func _process(delta: float) -> void:
 	# Pulsing barrier effect
 	if shield_arc:
 		shield_arc.width = 12.0 + sin(_pulse_phase) * 2.5
+	if _barrier_sprite:
+		var p_scale := 0.28 + sin(_pulse_phase) * 0.02
+		_barrier_sprite.scale = Vector2(p_scale, p_scale)
 		
 	# Check expiration
 	if _time_alive >= duration - 0.4:

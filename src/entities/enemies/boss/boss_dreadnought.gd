@@ -179,13 +179,13 @@ func _execute_bullet_hell_pattern() -> void:
 		var dir := Vector2.from_angle(angle)
 		# Only shoot towards the left hemisphere (towards player)
 		if dir.x < 0.2:
-			enemy_bullet_pool.spawn(core_pos, dir, 460.0, 12, true, false)
+			enemy_bullet_pool.spawn(core_pos, dir, 460.0, 12, true, false, 1.0, "enemy_orb")
 			
-	# Dual side front-mounted heavy weapons firing BIG plasma orbs (scale_mult = 2.8, 25 damage)
+	# Dual side front-mounted heavy weapons firing massive plasma artillery
 	var top_cannon_pos := core_pos + Vector2(-60.0, -85.0)
 	var bot_cannon_pos := core_pos + Vector2(-60.0, 85.0)
-	enemy_bullet_pool.spawn(top_cannon_pos, Vector2.LEFT, 680.0, 25, true, false, 2.8)
-	enemy_bullet_pool.spawn(bot_cannon_pos, Vector2.LEFT, 680.0, 25, true, false, 2.8)
+	enemy_bullet_pool.spawn(top_cannon_pos, Vector2.LEFT, 680.0, 25, true, false, 1.6, "enemy_heavy")
+	enemy_bullet_pool.spawn(bot_cannon_pos, Vector2.LEFT, 680.0, 25, true, false, 1.6, "enemy_heavy")
 
 func take_damage(amount: int) -> void:
 	if current_phase == BossPhase.DEFEATED:
@@ -246,6 +246,18 @@ func _die() -> void:
 	# Cascading explosion sequence
 	var death_tween := create_tween()
 	death_tween.tween_property(self, "modulate", Color(3.0, 2.0, 2.0, 1.0), 0.5)
+	
+	# Spawn multiple staggered cascading explosions across the flagship
+	for i in range(8):
+		var delay := 0.1 * i
+		var offset := Vector2(randf_range(-140, 140), randf_range(-100, 100))
+		get_tree().create_timer(delay).timeout.connect(func():
+			if is_inside_tree():
+				var main_scene := get_tree().current_scene
+				if main_scene:
+					ExplosionEffect.create(main_scene, global_position + offset, ExplosionEffect.ExplosionSize.BIG)
+		)
+		
 	death_tween.tween_property(self, "modulate:a", 0.0, 1.0)
 	death_tween.tween_callback(func():
 		_spawn_boss_rewards()

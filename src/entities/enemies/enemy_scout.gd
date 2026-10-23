@@ -37,4 +37,4 @@ func _fire_plasma() -> void:
 	if not enemy_bullet_pool:
 		return
 	# Shoot directly to the left with slight lead
-	enemy_bullet_pool.spawn(global_position + Vector2(-28, 0), Vector2.LEFT, 500.0, 10, true)
+	enemy_bullet_pool.spawn(global_position + Vector2(-28, 0), Vector2.LEFT, 500.0, 10, true, false, 1.0, "enemy_orb")

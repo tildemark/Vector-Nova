@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://c6j2yvx8v83qf"]
 
 [ext_resource type="Script" path="res://src/pools/projectile.gd" id="1_proj"]
-[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/player_laser.svg" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/laser.png" id="2_tex"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
-radius = 4.0
-height = 28.0
+radius = 6.0
+height = 36.0
 
 [node name="Projectile" type="Area2D"]
 collision_layer = 4
@@ -13,6 +13,7 @@ collision_mask = 2
 script = ExtResource("1_proj")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.16, 0.16)
 texture = ExtResource("2_tex")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

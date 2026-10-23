@@ -7,12 +7,15 @@ extends Area2D
 @export var damage_per_tick: int = 32
 @export var beam_length: float = 1200.0
 
+const BEAM_TEX = preload("res://assets/sprites/projectiles/hyper_beam.png")
+
 @onready var line_2d: Line2D = $Line2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 var _time_alive: float = 0.0
 var _tick_timer: float = 0.0
 var _parent_ship: Node2D = null
+var _beam_sprite: Sprite2D = null
 
 func _ready() -> void:
 	add_to_group("player_weapons")
@@ -21,6 +24,13 @@ func _ready() -> void:
 	
 	if line_2d:
 		line_2d.points = PackedVector2Array([Vector2.ZERO, Vector2(beam_length, 0)])
+	
+	_beam_sprite = Sprite2D.new()
+	_beam_sprite.texture = BEAM_TEX
+	_beam_sprite.position = Vector2(beam_length * 0.5, 0)
+	_beam_sprite.scale = Vector2(beam_length / 512.0, 0.35)
+	_beam_sprite.modulate = Color(2.0, 1.2, 1.5, 0.9)
+	add_child(_beam_sprite)
 	
 	# Initial entrance flare
 	scale.y = 0.2

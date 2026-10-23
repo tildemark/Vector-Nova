@@ -296,17 +296,22 @@ func _on_scrap_collected(amount: int) -> void:
 		scrap_label.scale = Vector2(1.2, 1.2)
 		tween.tween_property(scrap_label, "scale", Vector2.ONE, 0.15)
 
-func _on_enemy_destroyed(type: String, _pos: Vector2, _val: int) -> void:
+func _on_enemy_destroyed(type: String, pos: Vector2, _val: int) -> void:
 	shake_camera(3.0, 0.1)
 	_add_emp_charge(10.0) # +10% charge per kill
 	var lower_type := type.to_lower()
 	var pts := 120
 	if "heavy" in lower_type or "elite" in lower_type:
 		pts = 1200
+		ExplosionEffect.create(self, pos, ExplosionEffect.ExplosionSize.BIG)
 	elif "interceptor" in lower_type:
 		pts = 300
+		ExplosionEffect.create(self, pos, ExplosionEffect.ExplosionSize.SMALL)
 	elif "boss" in lower_type or "core" in lower_type:
 		pts = 5000
+		ExplosionEffect.create(self, pos, ExplosionEffect.ExplosionSize.BIG)
+	else:
+		ExplosionEffect.create(self, pos, ExplosionEffect.ExplosionSize.TINY)
 	_add_score(pts)
 
 func _on_hit_stop(duration_ms: float) -> void:
@@ -329,6 +334,7 @@ func _on_bullet_cancel() -> void:
 
 func _on_player_grazed(pos: Vector2) -> void:
 	_add_score(150)
+	GrazeSparkEffect.create(self, pos)
 	var label := Label.new()
 	label.text = "GRAZE +150"
 	label.modulate = Color(0.2, 1.0, 1.0, 0.95)

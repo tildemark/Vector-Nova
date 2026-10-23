@@ -7,23 +7,35 @@ extends Area2D
 @export var blast_damage: int = 280
 @export var blast_radius: float = 140.0
 
+const MORTAR_TEX = preload("res://assets/sprites/projectiles/pulse_mortar.png")
+
 @onready var visual_shell: Node2D = $VisualShell
 @onready var blast_area: Area2D = $BlastArea
 @onready var blast_shape: CollisionShape2D = $BlastArea/CollisionShape2D
 
 var _start_x: float = 0.0
 var _is_detonated: bool = false
+var _mortar_sprite: Sprite2D = null
 
 func _ready() -> void:
 	add_to_group("player_weapons")
 	_start_x = global_position.x
 	area_entered.connect(_on_impact)
+	
+	_mortar_sprite = Sprite2D.new()
+	_mortar_sprite.texture = MORTAR_TEX
+	_mortar_sprite.scale = Vector2(0.2, 0.2)
+	_mortar_sprite.modulate = Color(1.8, 1.4, 0.8, 1.0)
+	if visual_shell:
+		visual_shell.add_child(_mortar_sprite)
 
 func _process(delta: float) -> void:
 	if _is_detonated:
 		return
 		
 	global_position.x += flight_speed * delta
+	if _mortar_sprite:
+		_mortar_sprite.rotation += delta * 12.0
 	
 	# Detonate if traveled max distance or screen boundary
 	if absf(global_position.x - _start_x) >= max_flight_dist or global_position.x > 1200.0:
@@ -64,17 +76,7 @@ func detonate() -> void:
 			if (area.is_in_group("enemies") or area.is_in_group("boss_weakspots")) and area.has_method("take_damage"):
 				area.take_damage(blast_damage)
 				
-	# Animate expanding plasma sphere explosion
-	var blast_fx := Node2D.new()
-	add_child(blast_fx)
-	blast_fx.draw.connect(func():
-		blast_fx.draw_circle(Vector2.ZERO, blast_radius, Color(1.0, 0.6, 0.1, 0.35))
-		blast_fx.draw_circle(Vector2.ZERO, blast_radius * 0.7, Color(1.0, 0.85, 0.2, 0.7))
-		blast_fx.draw_circle(Vector2.ZERO, blast_radius * 0.3, Color(1.0, 1.0, 1.0, 0.95))
-	)
-	blast_fx.scale = Vector2(0.2, 0.2)
-	
-	var tween := create_tween()
-	tween.tween_property(blast_fx, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(blast_fx, "modulate:a", 0.0, 0.35)
-	tween.chain().tween_callback(queue_free)
+	# Animate expanding explosion using big_explosion sprite
+	if main:
+		ExplosionEffect.create(main, global_position, ExplosionEffect.ExplosionSize.BIG)
+	queue_free()
